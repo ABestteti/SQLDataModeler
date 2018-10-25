@@ -236,9 +236,22 @@ for (var t = 0; t<tables.length;t++){
  return null;
 }
 
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
+
+// Variable to store sequences for index name for
+// each table from the model. This sequence will be used
+// to form the index name, when it does not follow the naming
+// formation rule.
+var tablesIndexSequence;
+
 tables = model.getTableSet().toArray();
 for (var t = 0; t<tables.length;t++){
  table = tables[t];
+ tablesIndexSequence = 0;
  indexes = table.getKeys();
  for (var i = 0; i < indexes.length; i++) {
     index = indexes[i];
@@ -246,9 +259,9 @@ for (var t = 0; t<tables.length;t++){
      columns = index.getColumns();
      if(columns.length>0){
        newIndex = getIndex(table,columns);       
-       if(newIndex==null){
-         newIndex = table.createIndex()
-         newIndex.setName('IDX_' + index.getName());
+       if(newIndex==null){         
+         newIndex = table.createIndex();
+         newIndex.setName('IDX_' + table.getName() + '_' + pad(++tablesIndexSequence, 2));
          table.setDirty(true);
          for (var k = 0; k < columns.length; k++){
            newIndex.add(columns[k]);
