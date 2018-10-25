@@ -4,6 +4,10 @@ Please, fell free to send your comments on these scripts and suggestions to new 
 
 Please, note that thare are some scripts in this repository that are shipped with Oracle SQL Data Moduler.</br> 
 Here is the list the new sripts that I created:
-Custom Design Rules:
+# Custom Design Rules:
 - FK without index
 - Index with invalid name
+
+# Custom Reports for SQL Developer
+- Foreign Keys without index
+- Schema Diff (based on Jeffrey M. Hunter website; and adapted to work with SQL Developer)
