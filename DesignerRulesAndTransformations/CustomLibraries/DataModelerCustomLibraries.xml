@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- File contains Custom Libraries Scripts -->
+<custom_libraries>
+	<lib id="B310E434-78AE-6AED-EA94-6808B0262483" name="my first library" engine="Oracle Nashorn" methods="checkcomments,NotNullConstr_Name_Length" >
+		<script>
+			<![CDATA[// variable used to return custom message
+var ruleMessage;
+// variable used to return the type of the rule Error
+// or Warning and red/blue color will be used for result
+// if another custom type is returned (Problem in the rule below) 
+// then result is colored in yellow
+var errType;
+var table;
+function checkcomments(object){
+ result = true;
+ ruleMessage="";
+ if(table.getCommentInRDBMS().equals("")){
+  ruleMessage="no comments in RDBMS defined";
+  errType="Problem:";
+  result = false;
+ }
+ if(table.getComment().equals("")){
+  if(ruleMessage.equals("")){
+   ruleMessage="no comments defined";
+  }else{
+   ruleMessage= ruleMessage +" , no comments defined";
+   }
+   // can be changed to Warning    
+   errType="Error";
+  return false;
+ }
+ return result;
+}
+//rule for not null constraint name
+function NotNullConstr_Name_Length(column){
+ model = column.getDesignPart();
+ name = column.getNotNullConstraintName();
+ result = true;
+ if(name!=null && !"".equals(name)){
+	holder = model.getNamingOptionsHolderFor("oracle.dbtools.crest.model.design.constraint.TableLevelConstraint");
+	if ((holder.getMaxNameLength() > 0) && (name.length() > holder.getMaxNameLength())) {
+		result = false;
+	}
+ }
+ return result
+}]]>
+		</script>
+	</lib>
+	<lib id="2518F33A-DE50-9E1D-7216-DD2A0FD6B84C" name="Jruby lib" engine="JSR 223 JRuby Engine" methods="tables_up" >
+		<script>
+			<![CDATA[def tables_up(model)
+tables = model.getTableSet().toArray()
+for t in 0..tables.length-1
+ table = tables[t]
+ name = table.getName().upcase
+ table.setName(name)
+ columns = table.getElements()
+ size = table.getElementsCollection().size()-1
+ for i in 0..size
+	column = columns[i]
+	cname = column.getName().upcase
+	column.setName(cname)
+ end
+ keys = table.getKeys()
+ for i in 0..keys.length-1
+  key = keys[i]
+  kname = key.getName().upcase
+  key.setName(kname)
+ end
+end
+return true
+end]]>
+		</script>
+	</lib>
+	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca" >
+		<script>
+			<![CDATA[var versao = "1.0.01.11.2018";
+var titulo = "TJRS - Versão da biblioteca";
+
+javax.swing.JOptionPane
+     .showMessageDialog
+     (null, 
+      versao,
+      titulo,
+      javax.swing.JOptionPane.INFORMATION_MESSAGE
+     );   ]]>
+		</script>
+	</lib>
+</custom_libraries>
