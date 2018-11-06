@@ -38,7 +38,12 @@ checkFKColumns(index);]]>
 			<![CDATA[]]>
 		</script>
 	</scr>
-	<scr id="4091D7C0-AD54-B648-024F-FDD7E7B7D401" name="TJRS - FK without index X" object="Table" engine="Oracle Nashorn" type="Error" var="table" library="TJRS lib" method="FKWithOutIndex" purpose="validation" >
+	<scr id="4091D7C0-AD54-B648-024F-FDD7E7B7D401" name="TJRS - FK without index" object="Table" engine="Oracle Nashorn" type="Error" var="table" library="TJRS lib" method="FKWithOutIndex" purpose="validation" >
+		<script>
+			<![CDATA[]]>
+		</script>
+	</scr>
+	<scr id="50E1AC25-597E-FF23-9B08-30AFB6C83D10" name="TJRS - Versao da biblioteca de scripts" object="Domain" engine="Oracle Nashorn" type="Warning" var="domain" library="TJRS lib" method="versaoBiblioteca" purpose="validation" >
 		<script>
 			<![CDATA[]]>
 		</script>

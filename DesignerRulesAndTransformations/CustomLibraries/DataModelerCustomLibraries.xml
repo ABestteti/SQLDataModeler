@@ -72,7 +72,7 @@ return true
 end]]>
 		</script>
 	</lib>
-	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex" >
+	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK" >
 		<script>
 			<![CDATA[// Variable used to return custom message
 var ruleMessage;
@@ -86,7 +86,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "1.0.01.11.2018";
+  var versao = "1.0.06.11.2018";
   var titulo = "TJRS - Versão da biblioteca";
 
   javax.swing.JOptionPane
@@ -203,6 +203,60 @@ function FKWithOutIndex(table) {
     }
   }
   return result;
+}
+
+/*============================================================================*/
+
+// This custom transformation aims to spot FKs with have no index
+// and then create the index definition to support it.
+
+function createIndexOnFK() {
+  function getIndex(tab,cols){
+   keys = tab.getKeys();
+   for (var i = 0; i < keys.length; i++) {
+    indexTmp = keys[i];
+    if(!(indexTmp.isPK() || indexTmp.isUnique()) && !indexTmp.isFK() && indexTmp.isIndexForColumns(cols)){
+       return indexTmp
+     }
+   }
+   return null;
+  }
+  
+  function pad(num, size) {
+      var s = num+"";
+      while (s.length < size) s = "0" + s;
+      return s;
+  }
+  
+  // Variable to store sequences for index name for
+  // each table from the model. This sequence will be used
+  // to form the index name, when it does not follow the naming
+  // formation rule.
+  var tablesIndexSequence;
+  
+  tables = model.getTableSet().toArray();
+  for (var t = 0; t<tables.length;t++){
+    table = tables[t];
+    tablesIndexSequence = 0;
+    indexes = table.getKeys();
+    for (var i = 0; i < indexes.length; i++) {
+       index = indexes[i];
+       if(index.isFK()){
+        columns = index.getColumns();
+        if(columns.length>0){
+          newIndex = getIndex(table,columns);       
+          if(newIndex==null){         
+            newIndex = table.createIndex();
+            newIndex.setName('IDX_' + table.getName() + '_' + pad(++tablesIndexSequence, 2));
+            table.setDirty(true);
+            for (var k = 0; k < columns.length; k++){
+              newIndex.add(columns[k]);
+            }
+          }
+        }
+      }
+    }
+  }
 }]]>
 		</script>
 	</lib>
