@@ -72,7 +72,7 @@ return true
 end]]>
 		</script>
 	</lib>
-	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK" >
+	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName" >
 		<script>
 			<![CDATA[// Variable used to return custom message
 var ruleMessage;
@@ -86,8 +86,8 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "1.0.06.11.2018";
-  var titulo = "TJRS - Versão da biblioteca";
+  var versao = "Versão: 1.0.09.11.2018";
+  var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
      .showMessageDialog
@@ -100,35 +100,67 @@ function versaoBiblioteca() {
 
 /*============================================================================*/
 
-// This Design rule aims to spot indexes, which as not compliance
-// with name formation rule.
+/**
+ * Validate the index name, through a ReGex, based on the following
+ * document:
+ * https://www.tjrs.gov.br/sistemas/redmine/projects/dc34vcqwe4/wiki/Padr%C3%A3o_de_Nome_de_Objetos_de_Banco_de_Dados
+ * Parameter
+ *   pIndex: a index object
+ * Returns
+ *   boolean
+ */
+function isValidIndexName(pIndex) {
+   /**
+    * Regular expression to match an index name
+    * For more information, acess: https://regex101.com/r/aA8hI6/1
+    * 
+    * Rationale: ^IDX\_.+\_\d{2}$ or /^PK\_.+\_\d{2}$/i
+    *   ^ asserts position at start of a line
+    *   IDX matches the characters IDX literally (case sensitive)
+    *   \_ matches the character _ literally (case sensitive)
+    *   .+ matches any character (except for line terminators)
+    *   + Quantifier — Matches between one and unlimited times, as many times as possible, giving back as needed (greedy)
+    *   \_ matches the character _ literally (case sensitive)
+    *   \d{2} matches a digit (equal to [0-9])
+    *   {2} Quantifier — Matches exactly 2 times
+    *   $ asserts position at the end of a line
+    */
+   regexp = (pIndex.isPK() ? /^PK\_.+\_\d{2}$/i : /^IDX\_.+\_\d{2}$/i);
+   
+   return regexp.test(pIndex.getName());
+}
+
+/*============================================================================*/
+
+/**
+ * Pad zeros to a given number
+ * 
+ * Parameters
+ *   num: a number to be paded
+ *   size: leftmost zeroes to pad
+ * Returns
+ *   The number with leftmost zeroes
+ */
+function pad(num, size) {
+   var s = num+"";
+   while (s.length < size) s = "0" + s;
+   return s;
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot indexes, which as not compliance
+ * with name formation rule.
+ * 
+ * Parameters
+ *    table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
 function indexWithInvalidName(table) {
 
-  // Validade the index name, through a ReGex, based on the following
-  // document:
-  // https://www.tjrs.gov.br/sistemas/redmine/projects/dc34vcqwe4/wiki/Padr%C3%A3o_de_Nome_de_Objetos_de_Banco_de_Dados
-  // Parameter
-  //   pIndexName: a index name
-  // Returns
-  //   boolean
-  function isValidIndexName(pIndexName) {
-  	// Regular expression to match an index name
-  	// For more information, acess: https://regex101.com/r/aA8hI6/1
-  	// 
-  	// Rationale: ^IDX\_.+\_\d{2}$
-     //   ^ asserts position at start of a line
-     //   IDX matches the characters IDX literally (case sensitive)
-     //   \_ matches the character _ literally (case sensitive)
-     //   .+ matches any character (except for line terminators)
-     //   + Quantifier — Matches between one and unlimited times, as many times as possible, giving back as needed (greedy)
-     //   \_ matches the character _ literally (case sensitive)
-     //   \d{2} matches a digit (equal to [0-9])
-     //   {2} Quantifier — Matches exactly 2 times
-     //   $ asserts position at the end of a line  	 
-     regexp = /^IDX\_.+\_\d{2}$/i;    	 
-    	return regexp.test(pIndexName);
-  }
-	
   // Stores the result of this custom
   // design rule.
   result  = true;  
@@ -140,7 +172,7 @@ function indexWithInvalidName(table) {
   for (var i = 0; i < indexes.length; i++) {
     index = indexes[i];
     if (!index.isPK()){
-    	 if (!isValidIndexName(index.getName())) {
+    	 if (!isValidIndexName(index)) {
     	   ruleMessage  = "The index " + index.getName();
     	   ruleMessage += " has an invalid name. It must be IDX_"
     	   ruleMessage += table.getName() + "_NN, where NN is a two digits number.";
@@ -154,8 +186,16 @@ function indexWithInvalidName(table) {
 
 /*============================================================================*/
 
-// This Design rule aims to spot foreign key constraints which
-// have no index to support it.
+/**
+ * This Design rule aims to spot foreign key constraints which
+ * have no index to support it.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
 function FKWithOutIndex(table) {
 
   // Stores the list of table's keys, 
@@ -192,9 +232,7 @@ function FKWithOutIndex(table) {
       if (columns.length>0){
         newIndex = getIndex(table,columns);
         if (newIndex==null){
-
-          separator    = (++newIndexCount > 1) ? "; " : " ";
-          
+          separator    = (++newIndexCount > 1) ? "; " : " ";          
           ruleMessage += separator + index.getName();
           errType      = "Error";
           result       = false;
@@ -207,9 +245,10 @@ function FKWithOutIndex(table) {
 
 /*============================================================================*/
 
-// This custom transformation aims to spot FKs with have no index
-// and then create the index definition to support it.
-
+/**
+ * This custom transformation aims to spot FKs with have no index
+ * and then create the index definition to support it.
+ */
 function createIndexOnFK() {
   function getIndex(tab,cols){
    keys = tab.getKeys();
@@ -220,12 +259,6 @@ function createIndexOnFK() {
      }
    }
    return null;
-  }
-  
-  function pad(num, size) {
-      var s = num+"";
-      while (s.length < size) s = "0" + s;
-      return s;
   }
   
   // Variable to store sequences for index name for
@@ -256,6 +289,36 @@ function createIndexOnFK() {
         }
       }
     }
+  }
+}
+
+/*============================================================================*/
+
+/**
+ * This custom transformation aims to spot invalid index names, and then
+ * normalize its name according to name formation rules.
+ * 
+ * See https://www.tjrs.gov.br/sistemas/redmine/projects/dc34vcqwe4/wiki/Padr%C3%A3o_de_Nome_de_Objetos_de_Banco_de_Dados
+ */
+function normalizeIndexName() {
+  // Variable to store sequences for index name for
+  // each table from the model. This sequence will be used
+  // to form the index name, when it does not follow the naming
+  // formation rule.
+  var tablesIndexSequence;
+
+  tables = model.getTableSet().toArray();
+  for (var t = 0; t < tables.length; t++) {
+  	tableTmp = tables[t];
+     indexes  = tableTmp.getKeys();
+     tablesIndexSequence = 0;
+     for (var i = 0; i < indexes.length; i++) {
+        index = indexes[i];             
+        if (!isValidIndexName(index)) {
+          index.setName((index.isPK() ? "PK_" : "IDX_") + tableTmp.getName() + "_" + pad(++tablesIndexSequence, 2));
+          tableTmp.setDirty(true);
+        }
+     }
   }
 }]]>
 		</script>
