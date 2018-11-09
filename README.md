@@ -8,6 +8,10 @@ Here is the list the new sripts that I created:
 - FK without index
 - Index with invalid name
 
+# Custom Transformation Scripts:
+- Create index on FK
+- Normalize index name
+
 # Custom Reports for SQL Developer
 - Foreign Keys without index
 - Schema Diff (based on Jeffrey M. Hunter website; and adapted to work with SQL Developer)
