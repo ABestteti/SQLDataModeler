@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- File contains Custom Validation Scripts -->
+<custom__validation_scripts>
+	<scr id="D36CE536-D575-BE5C-625F-23DE23913C6B" name="Complex rule - check comments demo" object="Table" engine="Oracle Nashorn" type="Warning" var="table" library="my first library" method="checkcomments" purpose="validation" >
+		<script>
+			<![CDATA[]]>
+		</script>
+	</scr>
+	<scr id="D72E63EC-9DA2-3537-F8C9-AE8ACEDC73D2" name="Length of Not Null Constraint name" object="Column" engine="Oracle Nashorn" type="Error" var="column" library="my first library" method="NotNullConstr_Name_Length" purpose="validation" >
+		<script>
+			<![CDATA[]]>
+		</script>
+	</scr>
+	<scr id="3F2B77AE-F97F-EF6D-4D6D-C9FE4CC78999" name="Optional FK with mandatory columns" object="Index/Constraint" engine="Oracle Nashorn" type="Warning" var="index" library="" method="" purpose="validation" >
+		<script>
+			<![CDATA[var index;
+// define function - function parameter doesn't need to be named index
+function checkFKColumns(index){
+  //check it's foreign key index, otherwise FK is null
+ if(index.isFK()){
+ 	if(!index.getFKAssociation().isMandatory()){
+	 cols = index.getElements();
+	 for(var i=0;i<cols.length;i++){
+		if(cols[i].isMandatory()){
+			return false;
+		}
+	 }
+ 	}
+ }
+ return true;
+}
+// invoke the function
+checkFKColumns(index);]]>
+		</script>
+	</scr>
+	<scr id="273541C2-9F46-A972-510C-146B117AE338" name="TJRS - Index with invalid name" object="Table" engine="Oracle Nashorn" type="Error" var="table" library="TJRS lib" method="indexWithInvalidName" purpose="validation" >
+		<script>
+			<![CDATA[]]>
+		</script>
+	</scr>
+	<scr id="4091D7C0-AD54-B648-024F-FDD7E7B7D401" name="TJRS - FK without index" object="Table" engine="Oracle Nashorn" type="Error" var="table" library="TJRS lib" method="FKWithOutIndex" purpose="validation" >
+		<script>
+			<![CDATA[]]>
+		</script>
+	</scr>
+	<scr id="50E1AC25-597E-FF23-9B08-30AFB6C83D10" name="TJRS - Versao da biblioteca de scripts" object="Domain" engine="Oracle Nashorn" type="Warning" var="domain" library="TJRS lib" method="versaoBiblioteca" purpose="validation" >
+		<script>
+			<![CDATA[]]>
+		</script>
+	</scr>
+</custom__validation_scripts>
