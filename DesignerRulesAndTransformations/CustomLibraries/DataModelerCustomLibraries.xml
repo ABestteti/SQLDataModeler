@@ -107,7 +107,8 @@ function versaoBiblioteca() {
  * Parameter
  *   pIndex: a index object
  * Returns
- *   boolean
+ *   Boolean. True if the index name conforms to index name rule, 
+ *            otherwise False.
  */
 function isValidIndexName(pIndex) {
    /**
