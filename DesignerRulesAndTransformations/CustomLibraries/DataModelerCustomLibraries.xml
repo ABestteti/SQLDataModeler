@@ -86,7 +86,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.09.11.2018";
+  var versao = "Versão: 1.0.21.11.2018";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -308,15 +308,48 @@ function normalizeIndexName() {
   // formation rule.
   var tablesIndexSequence;
 
+  // Search for the highest index sequence by
+  // transversing pIndexes array;
+  function initIndexSequence(pIndexes, pTable) {
+
+  	indexSequenceTmp = 1;
+  	indexSequenceRet = 1;
+  	colision         = false;
+  	  	
+  	for (var seq = 0; seq < pIndexes.length; seq++) {
+  		indexTmp = pIndexes[seq];
+
+          // Discard PK index in search of highest index
+          // sequence.
+  		if (!indexTmp.isPK()) {
+  		   indexNameTmp = "IDX_" + pTable.getName() + "_" + pad(indexSequenceTmp++, 2);
+  		   indexTmp     = null;
+  		   indexTmp     = pTable.getIndexByName(indexNameTmp);
+
+  		   if (indexTmp != null) {
+  			 indexSequenceRet = indexSequenceTmp;
+  			 colision = true;
+  		   }
+  	     }
+  	}
+
+  	return (colision ? indexSequenceRet : 1);
+  }
+
   tables = model.getTableSet().toArray();
   for (var t = 0; t < tables.length; t++) {
   	tableTmp = tables[t];
      indexes  = tableTmp.getKeys();
-     tablesIndexSequence = 0;
+     tablesIndexSequence = initIndexSequence(indexes, tableTmp);
      for (var i = 0; i < indexes.length; i++) {
         index = indexes[i];             
         if (!isValidIndexName(index)) {
-          index.setName((index.isPK() ? "PK_" : "IDX_") + tableTmp.getName() + "_" + pad(++tablesIndexSequence, 2));
+        	// Set the new index name based on naming rule.
+        	// For PK index, the sequence will be discarded.
+          //index.setName((index.isPK() ? "PK_" : "IDX_") + tableTmp.getName() + "_" + pad(tablesIndexSequence++, 2));
+
+          index.setName((index.isPK() ? "PK_" : "IDX_") + tableTmp.getName() + (index.isPK() ? "" : "_" + pad(tablesIndexSequence++, 2)));
+          
           tableTmp.setDirty(true);
         }
      }
