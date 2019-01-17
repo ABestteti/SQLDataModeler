@@ -48,4 +48,9 @@ checkFKColumns(index);]]>
 			<![CDATA[]]>
 		</script>
 	</scr>
+	<scr id="B0F0E2CA-6F41-463F-73A0-17FB99716AC6" name="TJRS - Tables without primary key" object="Table" engine="Oracle Nashorn" type="Error" var="table" library="TJRS lib" method="tableWithOutPK" purpose="validation" >
+		<script>
+			<![CDATA[]]>
+		</script>
+	</scr>
 </custom__validation_scripts>

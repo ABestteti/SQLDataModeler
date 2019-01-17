@@ -72,7 +72,7 @@ return true
 end]]>
 		</script>
 	</lib>
-	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName" >
+	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName,tableWithOutPK" >
 		<script>
 			<![CDATA[// Variable used to return custom message
 var ruleMessage;
@@ -86,7 +86,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.21.11.2018";
+  var versao = "Versão: 1.0.17.01.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -354,7 +354,40 @@ function normalizeIndexName() {
         }
      }
   }
-}]]>
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no primary key.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+function tableWithOutPK(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;
+
+  // Try to retrieve the table's PK.
+  pk = table.getPK();
+
+  if (pk == null) {
+  	ruleMessage = "there is no primary key for this table.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;
+}
+
+/*============================================================================*/
+]]>
 		</script>
 	</lib>
 </custom_libraries>
