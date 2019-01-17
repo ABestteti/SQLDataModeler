@@ -387,6 +387,33 @@ function tableWithOutPK(table) {
 }
 
 /*============================================================================*/
+/**
+ * This Design rule aims to spot table which
+ * have no expected volume registered in the model.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+
+function tableWithOutVolumery(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;	
+  
+  expectedVolume = table.getExpectedVolumes();
+
+  if (expectedVolume == 0 || expectedVolume == null) {
+  	ruleMessage = "the table property 'Expected' cannot be 0 or null. Check table's Volume Properties.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;  
+}
 ]]>
 		</script>
 	</lib>

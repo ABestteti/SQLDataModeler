@@ -3,10 +3,11 @@ JavaScript scripts for Oracle SQL Data Modeler's custom design rules and custom 
 Please, fell free to send your comments on these scripts, as well as suggestions to new ones.
 
 Please, note that thare are some scripts in this repository that are shipped with Oracle SQL Data Moduler.</br> 
-Here is the list the new sripts that I created:
+Here is the list of new sripts that I created:
 # Custom Design Rules:
 - FK without index
 - Index with invalid name
+- Tables without primary key
 
 # Custom Transformation Scripts:
 - Create index on FK
