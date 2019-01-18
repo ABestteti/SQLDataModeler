@@ -53,4 +53,9 @@ checkFKColumns(index);]]>
 			<![CDATA[]]>
 		</script>
 	</scr>
+	<scr id="D52311F1-3FF2-EA90-8157-86E7A7C03776" name="TJRS - Tables without volumetry" object="Table" engine="Oracle Nashorn" type="Error" var="table" library="TJRS lib" method="tableWithOutVolumetry" purpose="validation" >
+		<script>
+			<![CDATA[]]>
+		</script>
+	</scr>
 </custom__validation_scripts>

@@ -72,7 +72,7 @@ return true
 end]]>
 		</script>
 	</lib>
-	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName,tableWithOutPK" >
+	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName,tableWithOutPK,tableWithOutVolumetry,tableWithOutDataCompression" >
 		<script>
 			<![CDATA[// Variable used to return custom message
 var ruleMessage;
@@ -387,6 +387,7 @@ function tableWithOutPK(table) {
 }
 
 /*============================================================================*/
+
 /**
  * This Design rule aims to spot table which
  * have no expected volume registered in the model.
@@ -398,12 +399,13 @@ function tableWithOutPK(table) {
  *             otherwise False.
  */
 
-function tableWithOutVolumery(table) {
+function tableWithOutVolumetry(table) {
 
   // Stores the result of this custom
   // design rule.
   result        = true;	
-  
+
+  // Get the expected amount of rows
   expectedVolume = table.getExpectedVolumes();
 
   if (expectedVolume == 0 || expectedVolume == null) {
@@ -414,7 +416,68 @@ function tableWithOutVolumery(table) {
 
   return result;  
 }
-]]>
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no expected volume property registered in the model.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+
+function tableWithOutVolumetry(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;	
+
+  // Get the expected amount of rows
+  expectedVolume = table.getExpectedVolumes();
+
+  if (expectedVolume == 0 || expectedVolume == null) {
+  	ruleMessage = "the table property 'Expected' cannot be 0 or null. Check table's Volume Properties.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;  
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no expected volume property registered in the model.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+
+function tableWithOutDataCompression(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;	
+
+  // Get the expected amount of rows
+  expectedVolume = table.getExpectedVolumes();
+
+  if (expectedVolume == 0 || expectedVolume == null) {
+  	ruleMessage = "the table property 'Expected' cannot be 0 or null. Check table's Volume Properties.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;  
+}]]>
 		</script>
 	</lib>
 </custom_libraries>
