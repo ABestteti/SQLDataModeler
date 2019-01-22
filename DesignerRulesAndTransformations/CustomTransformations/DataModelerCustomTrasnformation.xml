@@ -387,7 +387,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.21.11.2018";
+  var versao = "Versão: 1.0.22.01.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -655,6 +655,157 @@ function normalizeIndexName() {
         }
      }
   }
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no primary key.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+function tableWithOutPK(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;
+
+  // Try to retrieve the table's PK.
+  pk = table.getPK();
+
+  if (pk == null) {
+  	ruleMessage = "there is no primary key for this table.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no expected volume registered in the model.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+
+function tableWithOutVolumetry(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;	
+
+  // Get the expected amount of rows
+  expectedVolume = table.getExpectedVolumes();
+
+  if (expectedVolume == 0 || expectedVolume == null) {
+  	ruleMessage = "the table property 'Expected' cannot be 0 or null. Check table's Volume Properties.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;  
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no expected volume property registered in the model.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+
+function tableWithOutVolumetry(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;	
+
+  // Get the expected amount of rows
+  expectedVolume = table.getExpectedVolumes();
+
+  if (expectedVolume == 0 || expectedVolume == null) {
+  	ruleMessage = "the table property 'Expected' cannot be 0 or null. Check table's Volume Properties.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;  
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no compression property assigned to it.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+
+function tableWithOutDataCompression(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;	
+
+  // Get the expected amount of rows
+  expectedVolume = table.getExpectedVolumes();
+
+  if (expectedVolume == 0 || expectedVolume == null) {
+  	ruleMessage = "the table property 'Expected' cannot be 0 or null. Check table's Volume Properties.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;  
+}
+
+/**
+ * The goal of this custom transformation is to modify SQL command line
+ * session to set stop running the script on failure behavior and force
+ * the current schema to avoid to create the object in the wrong schema.
+ * 
+ * This function is being used by DDL Generator.
+ */
+function generateSQLConfiguration() {
+	var cfgDDL;
+
+	cfgDDL  = "\nPROMPT Configuracao do ambiente de execucao do SQL\n";
+	cfgDDL += "WHENEVER SQLERROR EXIT FAILURE;\n";
+	cfgDDL += "SET SCAN OFF;\n";
+	
+     // Assumes that the first element from the array of users is
+     // the correct user that represents the main model's schema.
+     // There is opened at My Oracle Support, SR 3-19213495941, asking how to
+     // get this information from Relational Model, Schemas rather than from
+     // from Physcal Model.
+     users = model.getStorageDesign().getUserSchemaSet().toArray();
+     user  = users[0];
+
+     cfgDDL += "ALTER SESSION SET CURRENT_SCHEMA=" + user.getName() + "\n\n";
+	
+	// Add the configuration at the begining of DDL script
+	ddlStatementsList.add(new java.lang.String(cfgDDL));
 }]]>
 		</script>
 	</scr>
@@ -672,7 +823,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.21.11.2018";
+  var versao = "Versão: 1.0.22.01.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -940,6 +1091,157 @@ function normalizeIndexName() {
         }
      }
   }
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no primary key.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+function tableWithOutPK(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;
+
+  // Try to retrieve the table's PK.
+  pk = table.getPK();
+
+  if (pk == null) {
+  	ruleMessage = "there is no primary key for this table.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no expected volume registered in the model.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+
+function tableWithOutVolumetry(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;	
+
+  // Get the expected amount of rows
+  expectedVolume = table.getExpectedVolumes();
+
+  if (expectedVolume == 0 || expectedVolume == null) {
+  	ruleMessage = "the table property 'Expected' cannot be 0 or null. Check table's Volume Properties.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;  
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no expected volume property registered in the model.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+
+function tableWithOutVolumetry(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;	
+
+  // Get the expected amount of rows
+  expectedVolume = table.getExpectedVolumes();
+
+  if (expectedVolume == 0 || expectedVolume == null) {
+  	ruleMessage = "the table property 'Expected' cannot be 0 or null. Check table's Volume Properties.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;  
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no compression property assigned to it.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+
+function tableWithOutDataCompression(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;	
+
+  // Get the expected amount of rows
+  expectedVolume = table.getExpectedVolumes();
+
+  if (expectedVolume == 0 || expectedVolume == null) {
+  	ruleMessage = "the table property 'Expected' cannot be 0 or null. Check table's Volume Properties.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;  
+}
+
+/**
+ * The goal of this custom transformation is to modify SQL command line
+ * session to set stop running the script on failure behavior and force
+ * the current schema to avoid to create the object in the wrong schema.
+ * 
+ * This function is being used by DDL Generator.
+ */
+function generateSQLConfiguration() {
+	var cfgDDL;
+
+	cfgDDL  = "\nPROMPT Configuracao do ambiente de execucao do SQL\n";
+	cfgDDL += "WHENEVER SQLERROR EXIT FAILURE;\n";
+	cfgDDL += "SET SCAN OFF;\n";
+	
+     // Assumes that the first element from the array of users is
+     // the correct user that represents the main model's schema.
+     // There is opened at My Oracle Support, SR 3-19213495941, asking how to
+     // get this information from Relational Model, Schemas rather than from
+     // from Physcal Model.
+     users = model.getStorageDesign().getUserSchemaSet().toArray();
+     user  = users[0];
+
+     cfgDDL += "ALTER SESSION SET CURRENT_SCHEMA=" + user.getName() + "\n\n";
+	
+	// Add the configuration at the begining of DDL script
+	ddlStatementsList.add(new java.lang.String(cfgDDL));
 }]]>
 		</script>
 	</scr>
@@ -957,7 +1259,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.21.11.2018";
+  var versao = "Versão: 1.0.22.01.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -1225,6 +1527,157 @@ function normalizeIndexName() {
         }
      }
   }
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no primary key.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+function tableWithOutPK(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;
+
+  // Try to retrieve the table's PK.
+  pk = table.getPK();
+
+  if (pk == null) {
+  	ruleMessage = "there is no primary key for this table.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no expected volume registered in the model.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+
+function tableWithOutVolumetry(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;	
+
+  // Get the expected amount of rows
+  expectedVolume = table.getExpectedVolumes();
+
+  if (expectedVolume == 0 || expectedVolume == null) {
+  	ruleMessage = "the table property 'Expected' cannot be 0 or null. Check table's Volume Properties.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;  
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no expected volume property registered in the model.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+
+function tableWithOutVolumetry(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;	
+
+  // Get the expected amount of rows
+  expectedVolume = table.getExpectedVolumes();
+
+  if (expectedVolume == 0 || expectedVolume == null) {
+  	ruleMessage = "the table property 'Expected' cannot be 0 or null. Check table's Volume Properties.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;  
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * have no compression property assigned to it.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+
+function tableWithOutDataCompression(table) {
+
+  // Stores the result of this custom
+  // design rule.
+  result        = true;	
+
+  // Get the expected amount of rows
+  expectedVolume = table.getExpectedVolumes();
+
+  if (expectedVolume == 0 || expectedVolume == null) {
+  	ruleMessage = "the table property 'Expected' cannot be 0 or null. Check table's Volume Properties.";
+     errType     = "Error";
+     result      = false;
+  }
+
+  return result;  
+}
+
+/**
+ * The goal of this custom transformation is to modify SQL command line
+ * session to set stop running the script on failure behavior and force
+ * the current schema to avoid to create the object in the wrong schema.
+ * 
+ * This function is being used by DDL Generator.
+ */
+function generateSQLConfiguration() {
+	var cfgDDL;
+
+	cfgDDL  = "\nPROMPT Configuracao do ambiente de execucao do SQL\n";
+	cfgDDL += "WHENEVER SQLERROR EXIT FAILURE;\n";
+	cfgDDL += "SET SCAN OFF;\n";
+	
+     // Assumes that the first element from the array of users is
+     // the correct user that represents the main model's schema.
+     // There is opened at My Oracle Support, SR 3-19213495941, asking how to
+     // get this information from Relational Model, Schemas rather than from
+     // from Physcal Model.
+     users = model.getStorageDesign().getUserSchemaSet().toArray();
+     user  = users[0];
+
+     cfgDDL += "ALTER SESSION SET CURRENT_SCHEMA=" + user.getName() + "\n\n";
+	
+	// Add the configuration at the begining of DDL script
+	ddlStatementsList.add(new java.lang.String(cfgDDL));
 }]]>
 		</script>
 	</scr>

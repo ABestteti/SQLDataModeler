@@ -72,7 +72,7 @@ return true
 end]]>
 		</script>
 	</lib>
-	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName,tableWithOutPK,tableWithOutVolumetry,tableWithOutDataCompression" >
+	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName,tableWithOutPK,tableWithOutVolumetry,tableWithOutDataCompression,generateSQLConfiguration" >
 		<script>
 			<![CDATA[// Variable used to return custom message
 var ruleMessage;
@@ -86,7 +86,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.17.01.2019";
+  var versao = "Versão: 1.0.22.01.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -452,7 +452,7 @@ function tableWithOutVolumetry(table) {
 
 /**
  * This Design rule aims to spot table which
- * have no expected volume property registered in the model.
+ * have no compression property assigned to it.
  * 
  * Parameters
  *   table: a given table object
@@ -477,6 +477,34 @@ function tableWithOutDataCompression(table) {
   }
 
   return result;  
+}
+
+/**
+ * The goal of this custom transformation is to modify SQL command line
+ * session to set stop running the script on failure behavior and force
+ * the current schema to avoid to create the object in the wrong schema.
+ * 
+ * This function is being used by DDL Generator.
+ */
+function generateSQLConfiguration() {
+	var cfgDDL;
+
+	cfgDDL  = "\nPROMPT Configuracao do ambiente de execucao do SQL\n";
+	cfgDDL += "WHENEVER SQLERROR EXIT FAILURE;\n";
+	cfgDDL += "SET SCAN OFF;\n";
+	
+     // Assumes that the first element from the array of users is
+     // the correct user that represents the main model's schema.
+     // There is opened at My Oracle Support, SR 3-19213495941, asking how to
+     // get this information from Relational Model, Schemas rather than from
+     // from Physcal Model.
+     users = model.getStorageDesign().getUserSchemaSet().toArray();
+     user  = users[0];
+
+     cfgDDL += "ALTER SESSION SET CURRENT_SCHEMA=" + user.getName() + "\n\n";
+	
+	// Add the configuration at the begining of DDL script
+	ddlStatementsList.add(new java.lang.String(cfgDDL));
 }]]>
 		</script>
 	</lib>
