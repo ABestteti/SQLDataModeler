@@ -72,7 +72,7 @@ return true
 end]]>
 		</script>
 	</lib>
-	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName,tableWithOutPK,tableWithOutVolumetry,tableWithOutDataCompression,generateSQLConfiguration" >
+	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName,tableWithOutPK,tableWithOutVolumetry,tableWithOutDataCompression,generateSQLConfiguration,normalizeStorageProperties" >
 		<script>
 			<![CDATA[// Variable used to return custom message
 var ruleMessage;
@@ -505,7 +505,51 @@ function generateSQLConfiguration() {
 	
 	// Add the configuration at the begining of DDL script
 	ddlStatementsList.add(new java.lang.String(cfgDDL));
-}]]>
+}
+
+function normalizeStorageProperties() {
+var DATA_COMPRESSION_YES  = "YES";
+var DATA_COMPRESSION_HIGH = "HIGH";
+var COMPRESSION_OLTP      = "OLTP";
+var LOB_STORAGE_TYPE_SEC  = "SECUREFILE";
+var LOB_DUPLICATION_TYPE  = "DEDUPLICATE";
+var LOB_CACHE_READS       = "CACHE READS";
+var LOB_CHUNK_ZERO        = 0;
+var LOB_VERSION_RETENTION = "RETENTION";
+
+var tables = model.getStorageDesign().getTableProxySet().toArray();
+
+for (var i=0; i < tables.length; i++) {
+	table = tables[i]
+
+	// Adjust table compression and compression type
+	if (table.getDataSegmentCompression() != DATA_COMPRESSION_YES) {
+		table.setDataSegmentCompression(DATA_COMPRESSION_YES);
+		table.setDirty(true);
+	}
+
+	if (table.getCompressionType() != COMPRESSION_OLTP) {
+		table.setCompressionType(true);
+		table.setDirty(true);
+	}
+
+	// Adjust log Storage, just in case it exists for the underlining table,
+	// as follows:
+	tableLobStorages = table.getLobStorages().toArray();
+	for (var k=0; k < tableLobStorages.length; k++) {
+		tableLobStorage = tableLobStorages[k];
+		
+		tableLobStorage.setLobStorageType(LOB_STORAGE_TYPE_SEC);
+		tableLobStorage.setCompression(DATA_COMPRESSION_YES);
+		tableLobStorage.setCompressionType(DATA_COMPRESSION_HIGH);
+		tableLobStorage.setDuplication(LOB_DUPLICATION_TYPE);
+		tableLobStorage.setCache(LOB_CACHE_READS);
+		tableLobStorage.setChunk(LOB_CHUNK_ZERO);
+		tableLobStorage.setOldVersions(LOB_VERSION_RETENTION);
+	}
+}
+}
+]]>
 		</script>
 	</lib>
 </custom_libraries>
