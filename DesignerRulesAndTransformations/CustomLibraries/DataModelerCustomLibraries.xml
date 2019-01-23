@@ -86,7 +86,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.22.01.2019";
+  var versao = "Versão: 1.0.23.01.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -507,49 +507,76 @@ function generateSQLConfiguration() {
 	ddlStatementsList.add(new java.lang.String(cfgDDL));
 }
 
+function getTableVolumetry(pTable) {
+	
+	var table = model.getTableSet().getByName(pTable.getName());
+	var retVolumetry = 0;
+	
+	if (table != null) {
+		retVolumetry = table.getExpectedVolumes();
+	}
+	
+	return retVolumetry;
+}
+
 function normalizeStorageProperties() {
-var DATA_COMPRESSION_YES  = "YES";
-var DATA_COMPRESSION_HIGH = "HIGH";
-var COMPRESSION_OLTP      = "OLTP";
-var LOB_STORAGE_TYPE_SEC  = "SECUREFILE";
-var LOB_DUPLICATION_TYPE  = "DEDUPLICATE";
-var LOB_CACHE_READS       = "CACHE READS";
-var LOB_CHUNK_ZERO        = 0;
-var LOB_VERSION_RETENTION = "RETENTION";
 
-var tables = model.getStorageDesign().getTableProxySet().toArray();
-
-for (var i=0; i < tables.length; i++) {
-	table = tables[i]
-
-	// Adjust table compression and compression type
-	if (table.getDataSegmentCompression() != DATA_COMPRESSION_YES) {
-		table.setDataSegmentCompression(DATA_COMPRESSION_YES);
-		table.setDirty(true);
-	}
-
-	if (table.getCompressionType() != COMPRESSION_OLTP) {
-		table.setCompressionType(true);
-		table.setDirty(true);
-	}
-
-	// Adjust log Storage, just in case it exists for the underlining table,
-	// as follows:
-	tableLobStorages = table.getLobStorages().toArray();
-	for (var k=0; k < tableLobStorages.length; k++) {
-		tableLobStorage = tableLobStorages[k];
+	// Constants for properties to be updated in
+	// the model.
+	var DATA_COMPRESSION_YES  = "YES";
+	var DATA_COMPRESSION_HIGH = "HIGH";
+	var COMPRESSION_OLTP      = "OLTP";
+	var LOB_STORAGE_TYPE_SEC  = "SECUREFILE";
+	var LOB_DUP_TYPE_DEDUP    = "DEDUPLICATE";
+	var LOB_CACHE_READS       = "CACHE READS";
+	var LOB_CHUNK_ZERO        = 0;
+	var LOB_VERSION_RETENTION = "RETENTION";
+	
+	// Retrieve a set of tables from the Physical Model
+	var tables = model.getStorageDesign().getTableProxySet().toArray();
+	
+	for (var i=0; i < tables.length; i++) {
+		table = tables[i]
+	
+		// Adjust table compression and compression type
+		if (table.getDataSegmentCompression() != DATA_COMPRESSION_YES) {
+			table.setDataSegmentCompression(DATA_COMPRESSION_YES);
+			table.setDirty(true);
+		}
+	
+		if (table.getCompressionType() != COMPRESSION_OLTP) {
+			table.setCompressionType(true);
+			table.setDirty(true);
+		}
 		
-		tableLobStorage.setLobStorageType(LOB_STORAGE_TYPE_SEC);
-		tableLobStorage.setCompression(DATA_COMPRESSION_YES);
-		tableLobStorage.setCompressionType(DATA_COMPRESSION_HIGH);
-		tableLobStorage.setDuplication(LOB_DUPLICATION_TYPE);
-		tableLobStorage.setCache(LOB_CACHE_READS);
-		tableLobStorage.setChunk(LOB_CHUNK_ZERO);
-		tableLobStorage.setOldVersions(LOB_VERSION_RETENTION);
+		// Adjust table's tablespace based on volumetry stored
+		// in table's Physical Model section.
+		tableVolumetry = getTableVolumetry(table);
+		if (tableVolumetry != 0) {
+			if (tableVolumetry > 0 && tableVolumetry <= 100000) {
+				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName("HP_1M_01D");
+				table.setTableSpace(tableSpace);
+			}
+		}
+	
+		// Adjust table's Lob Storage, just in case it exists for the underlying table,
+		// as follows:
+		tableLobStorages = table.getLobStorages().toArray();
+		for (var k=0; k < tableLobStorages.length; k++) {
+			tableLobStorage = tableLobStorages[k];
+			
+			tableLobStorage.setLobStorageType(LOB_STORAGE_TYPE_SEC);
+			tableLobStorage.setCompression(DATA_COMPRESSION_YES);
+			tableLobStorage.setCompressionType(DATA_COMPRESSION_HIGH);
+			tableLobStorage.setDuplication(LOB_DUP_TYPE_DEDUP);
+			tableLobStorage.setCache(LOB_CACHE_READS);
+			tableLobStorage.setChunk(LOB_CHUNK_ZERO);
+			tableLobStorage.setOldVersions(LOB_VERSION_RETENTION);
+	
+			table.setDirty(true);
+		}
 	}
-}
-}
-]]>
+}]]>
 		</script>
 	</lib>
 </custom_libraries>
