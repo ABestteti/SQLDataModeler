@@ -552,7 +552,14 @@ function normalizeStorageProperties() {
 	// Lob's Tablespace per table expected rows
 	var LOB_TABLESPACE_SMALL  = "OA_1M_32K_01L";
 	var LOB_TABLESPACE_MEDIUM = "OA_16M_32K_01L";
-	var LOB_TABLESPACE_LARGE  = "OA_256M_32K_01L";	
+	var LOB_TABLESPACE_LARGE  = "OA_256M_32K_01L";
+
+	// Volumetry ranges
+	var START_RANGE_SMALL  = 0;
+	var END_RANGE_SMALL    = 100000;
+	var START_RANGE_MEDIUM = 100001;
+	var END_RANGE_MEDIUM   = 1000000;
+	var START_RANGE_LARGE  = 1000000;
 
 	// Retrieve and process a set of tables from the Physical Model
 	var tables = model.getStorageDesign().getTableProxySet().toArray();
@@ -575,13 +582,13 @@ function normalizeStorageProperties() {
 		// in table's Relational Model section.
 		tableVolumetry = getTableVolumetry(table);
 		if (tableVolumetry != null) {
-			if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
+			if (tableVolumetry >= START_RANGE_SMALL && tableVolumetry <= END_RANGE_SMALL) {
 				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_SMALL);
 				table.setTableSpace(tableSpace);
-			} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
+			} else if (tableVolumetry >= START_RANGE_MEDIUM && tableVolumetry <= END_RANGE_MEDIUM) {
 				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_MEDIUM);
 				table.setTableSpace(tableSpace);
-			} else if (tableVolumetry > 1000000) {
+			} else if (tableVolumetry > START_RANGE_LARGE) {
 				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_LARGE);
 				table.setTableSpace(tableSpace);
 			}
@@ -593,13 +600,13 @@ function normalizeStorageProperties() {
 	     for (var x=0; x < tableIndexes.length; x++) {
 	     	tableIndex = tableIndexes[x];
 	     	if (tableVolumetry != null) {
-	     		if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
+	     		if (tableVolumetry >= START_RANGE_SMALL && tableVolumetry <= END_RANGE_SMALL) {
 	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_SMALL);
 	     			tableIndex.setTableSpace(tableSpace);
-	     		} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
+	     		} else if (tableVolumetry >= START_RANGE_MEDIUM && tableVolumetry <= END_RANGE_MEDIUM) {
 	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_MEDIUM);
 	     			tableIndex.setTableSpace(tableSpace);
-	     		} else if (tableVolumetry > 1000000) {
+	     		} else if (tableVolumetry > START_RANGE_LARGE) {
 	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_LARGE);
 	     			tableIndex.setTableSpace(tableSpace);
 	     		}
@@ -623,13 +630,13 @@ function normalizeStorageProperties() {
 			tableLobStorage.setOldVersions(LOB_VERSION_RETENTION);
 
 	     	if (tableVolumetry != null) {
-	     		if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
+	     		if (tableVolumetry >= START_RANGE_SMALL && tableVolumetry <= END_RANGE_SMALL) {
 	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_SMALL);
 	     			tableLobStorage.setTableSpace(tableSpace);
-	     		} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
+	     		} else if (tableVolumetry >= START_RANGE_MEDIUM && tableVolumetry <= END_RANGE_MEDIUM) {
 	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_MEDIUM);
 	     			tableLobStorage.setTableSpace(tableSpace);
-	     		} else if (tableVolumetry > 1000000) {
+	     		} else if (tableVolumetry > START_RANGE_LARGE) {
 	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_LARGE);
 	     			tableLobStorage.setTableSpace(tableSpace);
 	     		}
