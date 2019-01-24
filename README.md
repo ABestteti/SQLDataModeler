@@ -8,10 +8,12 @@ Here is the list of new sripts that I created:
 - FK without index
 - Index with invalid name
 - Tables without primary key
+- Tables without volume properties
 
 # Custom Transformation Scripts:
 - Create index on FK
 - Normalize index name
+- Adjuste table, index and lob storage properties
 
 # Custom Reports for SQL Developer
 - Foreign Keys without index
