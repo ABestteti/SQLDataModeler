@@ -387,7 +387,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.23.01.2019";
+  var versao = "Versão: 1.0.24.01.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -851,9 +851,9 @@ function normalizeStorageProperties() {
 	var INDEX_TABLESPACE_LARGE  = "HP_256M_01X";
 	
 	// Lob's Tablespace per table expected rows
-	var LOB_TABLESPACE_SMALL  = "OA_1M_01L";
-	var LOB_TABLESPACE_MEDIUM = "OA_16M_01L";
-	var LOB_TABLESPACE_LARGE  = "OA_256M_01L";	
+	var LOB_TABLESPACE_SMALL  = "OA_1M_32K_01L";
+	var LOB_TABLESPACE_MEDIUM = "OA_16M_32K_01L";
+	var LOB_TABLESPACE_LARGE  = "OA_256M_32K_01L";	
 
 	// Retrieve and process a set of tables from the Physical Model
 	var tables = model.getStorageDesign().getTableProxySet().toArray();
@@ -879,7 +879,7 @@ function normalizeStorageProperties() {
 			if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
 				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_SMALL);
 				table.setTableSpace(tableSpace);
-			} else if (tableVolumetry > 100001 && tableVolumetry <= 1000000) {
+			} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
 				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_MEDIUM);
 				table.setTableSpace(tableSpace);
 			} else if (tableVolumetry > 1000000) {
@@ -887,8 +887,29 @@ function normalizeStorageProperties() {
 				table.setTableSpace(tableSpace);
 			}
 		}
-	
-		// Adjust table's Lob Storage, just in case it exists for the underlying table,
+
+	     // Adjust table indexes' tablespace based on volumetry stored
+		// in table's Relational Model section.
+	     tableIndexes = table.getIndexes().toArray();
+	     for (var x=0; x < tableIndexes.length; x++) {
+	     	tableIndex = tableIndexes[x];
+	     	if (tableVolumetry != null) {
+	     		if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_SMALL);
+	     			tableIndex.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_MEDIUM);
+	     			tableIndex.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry > 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_LARGE);
+	     			tableIndex.setTableSpace(tableSpace);
+	     		}
+
+	     		tableIndex.setDirty(true);
+	     	}
+	     }
+	     
+		// Adjust table's Lob Storage ans Tablespace, just in case it exists for the underlying table,
 		// as follows:
 		tableLobStorages = table.getLobStorages().toArray();
 		for (var k=0; k < tableLobStorages.length; k++) {
@@ -901,12 +922,24 @@ function normalizeStorageProperties() {
 			tableLobStorage.setCache(LOB_CACHE_READS);
 			tableLobStorage.setChunk(LOB_CHUNK_ZERO);
 			tableLobStorage.setOldVersions(LOB_VERSION_RETENTION);
-	
+
+	     	if (tableVolumetry != null) {
+	     		if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_SMALL);
+	     			tableLobStorage.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_MEDIUM);
+	     			tableLobStorage.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry > 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_LARGE);
+	     			tableLobStorage.setTableSpace(tableSpace);
+	     		}
+	     	}
+	     	
 			table.setDirty(true);
 		}
 	}
-}
-]]>
+}]]>
 		</script>
 	</scr>
 	<scr id="C9DFEA82-545A-A8B3-8BC2-FFA80A751179" name="TJRS - Create index on FK" object="relational" engine="Oracle Nashorn" var="model" library="TJRS lib" method="createIndexOnFK" purpose="transformation" >
@@ -923,7 +956,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.23.01.2019";
+  var versao = "Versão: 1.0.24.01.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -1387,9 +1420,9 @@ function normalizeStorageProperties() {
 	var INDEX_TABLESPACE_LARGE  = "HP_256M_01X";
 	
 	// Lob's Tablespace per table expected rows
-	var LOB_TABLESPACE_SMALL  = "OA_1M_01L";
-	var LOB_TABLESPACE_MEDIUM = "OA_16M_01L";
-	var LOB_TABLESPACE_LARGE  = "OA_256M_01L";	
+	var LOB_TABLESPACE_SMALL  = "OA_1M_32K_01L";
+	var LOB_TABLESPACE_MEDIUM = "OA_16M_32K_01L";
+	var LOB_TABLESPACE_LARGE  = "OA_256M_32K_01L";	
 
 	// Retrieve and process a set of tables from the Physical Model
 	var tables = model.getStorageDesign().getTableProxySet().toArray();
@@ -1415,7 +1448,7 @@ function normalizeStorageProperties() {
 			if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
 				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_SMALL);
 				table.setTableSpace(tableSpace);
-			} else if (tableVolumetry > 100001 && tableVolumetry <= 1000000) {
+			} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
 				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_MEDIUM);
 				table.setTableSpace(tableSpace);
 			} else if (tableVolumetry > 1000000) {
@@ -1423,8 +1456,29 @@ function normalizeStorageProperties() {
 				table.setTableSpace(tableSpace);
 			}
 		}
-	
-		// Adjust table's Lob Storage, just in case it exists for the underlying table,
+
+	     // Adjust table indexes' tablespace based on volumetry stored
+		// in table's Relational Model section.
+	     tableIndexes = table.getIndexes().toArray();
+	     for (var x=0; x < tableIndexes.length; x++) {
+	     	tableIndex = tableIndexes[x];
+	     	if (tableVolumetry != null) {
+	     		if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_SMALL);
+	     			tableIndex.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_MEDIUM);
+	     			tableIndex.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry > 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_LARGE);
+	     			tableIndex.setTableSpace(tableSpace);
+	     		}
+
+	     		tableIndex.setDirty(true);
+	     	}
+	     }
+	     
+		// Adjust table's Lob Storage ans Tablespace, just in case it exists for the underlying table,
 		// as follows:
 		tableLobStorages = table.getLobStorages().toArray();
 		for (var k=0; k < tableLobStorages.length; k++) {
@@ -1437,12 +1491,24 @@ function normalizeStorageProperties() {
 			tableLobStorage.setCache(LOB_CACHE_READS);
 			tableLobStorage.setChunk(LOB_CHUNK_ZERO);
 			tableLobStorage.setOldVersions(LOB_VERSION_RETENTION);
-	
+
+	     	if (tableVolumetry != null) {
+	     		if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_SMALL);
+	     			tableLobStorage.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_MEDIUM);
+	     			tableLobStorage.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry > 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_LARGE);
+	     			tableLobStorage.setTableSpace(tableSpace);
+	     		}
+	     	}
+	     	
 			table.setDirty(true);
 		}
 	}
-}
-]]>
+}]]>
 		</script>
 	</scr>
 	<scr id="0386CF20-7A5F-BE9F-E5B6-4CB1004A4F1A" name="TJRS - Normalize index name" object="relational" engine="Oracle Nashorn" var="model" library="TJRS lib" method="normalizeIndexName" purpose="transformation" >
@@ -1459,7 +1525,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.23.01.2019";
+  var versao = "Versão: 1.0.24.01.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -1923,9 +1989,9 @@ function normalizeStorageProperties() {
 	var INDEX_TABLESPACE_LARGE  = "HP_256M_01X";
 	
 	// Lob's Tablespace per table expected rows
-	var LOB_TABLESPACE_SMALL  = "OA_1M_01L";
-	var LOB_TABLESPACE_MEDIUM = "OA_16M_01L";
-	var LOB_TABLESPACE_LARGE  = "OA_256M_01L";	
+	var LOB_TABLESPACE_SMALL  = "OA_1M_32K_01L";
+	var LOB_TABLESPACE_MEDIUM = "OA_16M_32K_01L";
+	var LOB_TABLESPACE_LARGE  = "OA_256M_32K_01L";	
 
 	// Retrieve and process a set of tables from the Physical Model
 	var tables = model.getStorageDesign().getTableProxySet().toArray();
@@ -1951,7 +2017,7 @@ function normalizeStorageProperties() {
 			if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
 				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_SMALL);
 				table.setTableSpace(tableSpace);
-			} else if (tableVolumetry > 100001 && tableVolumetry <= 1000000) {
+			} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
 				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_MEDIUM);
 				table.setTableSpace(tableSpace);
 			} else if (tableVolumetry > 1000000) {
@@ -1959,8 +2025,29 @@ function normalizeStorageProperties() {
 				table.setTableSpace(tableSpace);
 			}
 		}
-	
-		// Adjust table's Lob Storage, just in case it exists for the underlying table,
+
+	     // Adjust table indexes' tablespace based on volumetry stored
+		// in table's Relational Model section.
+	     tableIndexes = table.getIndexes().toArray();
+	     for (var x=0; x < tableIndexes.length; x++) {
+	     	tableIndex = tableIndexes[x];
+	     	if (tableVolumetry != null) {
+	     		if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_SMALL);
+	     			tableIndex.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_MEDIUM);
+	     			tableIndex.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry > 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_LARGE);
+	     			tableIndex.setTableSpace(tableSpace);
+	     		}
+
+	     		tableIndex.setDirty(true);
+	     	}
+	     }
+	     
+		// Adjust table's Lob Storage ans Tablespace, just in case it exists for the underlying table,
 		// as follows:
 		tableLobStorages = table.getLobStorages().toArray();
 		for (var k=0; k < tableLobStorages.length; k++) {
@@ -1973,15 +2060,27 @@ function normalizeStorageProperties() {
 			tableLobStorage.setCache(LOB_CACHE_READS);
 			tableLobStorage.setChunk(LOB_CHUNK_ZERO);
 			tableLobStorage.setOldVersions(LOB_VERSION_RETENTION);
-	
+
+	     	if (tableVolumetry != null) {
+	     		if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_SMALL);
+	     			tableLobStorage.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_MEDIUM);
+	     			tableLobStorage.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry > 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_LARGE);
+	     			tableLobStorage.setTableSpace(tableSpace);
+	     		}
+	     	}
+	     	
 			table.setDirty(true);
 		}
 	}
-}
-]]>
+}]]>
 		</script>
 	</scr>
-	<scr id="2CE8379C-CED7-A244-CCCB-6DDF67D763CD" name="TJRS - Adjust table storage properties" object="relational" engine="Oracle Nashorn" var="model" library="TJRS lib" method="normalizeStorageProperties" purpose="transformation" >
+	<scr id="0B39A5FF-E071-7136-44C6-F393F9860AE0" name="TJRS - Adjust table storage properties" object="relational" engine="Oracle Nashorn" var="model" library="TJRS lib" method="normalizeStorageProperties" purpose="transformation" >
 		<script>
 			<![CDATA[// Variable used to return custom message
 var ruleMessage;
@@ -1995,7 +2094,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.23.01.2019";
+  var versao = "Versão: 1.0.24.01.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -2459,9 +2558,9 @@ function normalizeStorageProperties() {
 	var INDEX_TABLESPACE_LARGE  = "HP_256M_01X";
 	
 	// Lob's Tablespace per table expected rows
-	var LOB_TABLESPACE_SMALL  = "OA_1M_01L";
-	var LOB_TABLESPACE_MEDIUM = "OA_16M_01L";
-	var LOB_TABLESPACE_LARGE  = "OA_256M_01L";	
+	var LOB_TABLESPACE_SMALL  = "OA_1M_32K_01L";
+	var LOB_TABLESPACE_MEDIUM = "OA_16M_32K_01L";
+	var LOB_TABLESPACE_LARGE  = "OA_256M_32K_01L";	
 
 	// Retrieve and process a set of tables from the Physical Model
 	var tables = model.getStorageDesign().getTableProxySet().toArray();
@@ -2487,7 +2586,7 @@ function normalizeStorageProperties() {
 			if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
 				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_SMALL);
 				table.setTableSpace(tableSpace);
-			} else if (tableVolumetry > 100001 && tableVolumetry <= 1000000) {
+			} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
 				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_MEDIUM);
 				table.setTableSpace(tableSpace);
 			} else if (tableVolumetry > 1000000) {
@@ -2495,8 +2594,29 @@ function normalizeStorageProperties() {
 				table.setTableSpace(tableSpace);
 			}
 		}
-	
-		// Adjust table's Lob Storage, just in case it exists for the underlying table,
+
+	     // Adjust table indexes' tablespace based on volumetry stored
+		// in table's Relational Model section.
+	     tableIndexes = table.getIndexes().toArray();
+	     for (var x=0; x < tableIndexes.length; x++) {
+	     	tableIndex = tableIndexes[x];
+	     	if (tableVolumetry != null) {
+	     		if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_SMALL);
+	     			tableIndex.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_MEDIUM);
+	     			tableIndex.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry > 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_LARGE);
+	     			tableIndex.setTableSpace(tableSpace);
+	     		}
+
+	     		tableIndex.setDirty(true);
+	     	}
+	     }
+	     
+		// Adjust table's Lob Storage ans Tablespace, just in case it exists for the underlying table,
 		// as follows:
 		tableLobStorages = table.getLobStorages().toArray();
 		for (var k=0; k < tableLobStorages.length; k++) {
@@ -2509,12 +2629,24 @@ function normalizeStorageProperties() {
 			tableLobStorage.setCache(LOB_CACHE_READS);
 			tableLobStorage.setChunk(LOB_CHUNK_ZERO);
 			tableLobStorage.setOldVersions(LOB_VERSION_RETENTION);
-	
+
+	     	if (tableVolumetry != null) {
+	     		if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_SMALL);
+	     			tableLobStorage.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry >= 100001 && tableVolumetry <= 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_MEDIUM);
+	     			tableLobStorage.setTableSpace(tableSpace);
+	     		} else if (tableVolumetry > 1000000) {
+	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_LARGE);
+	     			tableLobStorage.setTableSpace(tableSpace);
+	     		}
+	     	}
+	     	
 			table.setDirty(true);
 		}
 	}
-}
-]]>
+}]]>
 		</script>
 	</scr>
 </custom_transformation_scripts>
