@@ -86,7 +86,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.23.01.2019";
+  var versao = "Versão: 1.0.24.01.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -480,7 +480,7 @@ function tableWithOutDataCompression(table) {
 }
 
 /**
- * The goal of this custom transformation is to modify SQL command line
+ * The goal of this custom transformation script is to modify SQL command line
  * session to set stop running the script on failure behavior and force
  * the current schema to avoid to create the object in the wrong schema.
  * 
@@ -519,6 +519,13 @@ function getTableVolumetry(pTable) {
 	return retVolumetry;
 }
 
+/**
+ * The goal of this custom transformation script is to adjust
+ * tables' storage parameters according to cient's standards.
+ * For example, the right tablespace will be defined based on "expected rows"
+ * property, stored in tables' metadata. There are a set of other properties that
+ * will be adjusted as client's standards.
+ */
 function normalizeStorageProperties() {
 
 	// Constants for properties to be updated in
@@ -531,8 +538,23 @@ function normalizeStorageProperties() {
 	var LOB_CACHE_READS       = "CACHE READS";
 	var LOB_CHUNK_ZERO        = 0;
 	var LOB_VERSION_RETENTION = "RETENTION";
+
+	// Table's Tablespace per expected rows
+	var TABLE_TABLESPACE_SMALL  = "HP_1M_01D";
+	var TABLE_TABLESPACE_MEDIUM = "HP_16M_01D";
+	var TABLE_TABLESPACE_LARGE  = "HP_256M_01D";
 	
-	// Retrieve a set of tables from the Physical Model
+	// Index's Tablespace per table expected rows
+	var INDEX_TABLESPACE_SMALL  = "HP_1M_01X";
+	var INDEX_TABLESPACE_MEDIUM = "HP_16M_01X";
+	var INDEX_TABLESPACE_LARGE  = "HP_256M_01X";
+	
+	// Lob's Tablespace per table expected rows
+	var LOB_TABLESPACE_SMALL  = "OA_1M_01L";
+	var LOB_TABLESPACE_MEDIUM = "OA_16M_01L";
+	var LOB_TABLESPACE_LARGE  = "OA_256M_01L";	
+
+	// Retrieve and process a set of tables from the Physical Model
 	var tables = model.getStorageDesign().getTableProxySet().toArray();
 	
 	for (var i=0; i < tables.length; i++) {
@@ -550,11 +572,17 @@ function normalizeStorageProperties() {
 		}
 		
 		// Adjust table's tablespace based on volumetry stored
-		// in table's Physical Model section.
+		// in table's Relational Model section.
 		tableVolumetry = getTableVolumetry(table);
-		if (tableVolumetry != 0) {
-			if (tableVolumetry > 0 && tableVolumetry <= 100000) {
-				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName("HP_1M_01D");
+		if (tableVolumetry != null) {
+			if (tableVolumetry >= 0 && tableVolumetry <= 100000) {
+				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_SMALL);
+				table.setTableSpace(tableSpace);
+			} else if (tableVolumetry > 100001 && tableVolumetry <= 1000000) {
+				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_MEDIUM);
+				table.setTableSpace(tableSpace);
+			} else if (tableVolumetry > 1000000) {
+				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_LARGE);
 				table.setTableSpace(tableSpace);
 			}
 		}
@@ -576,7 +604,8 @@ function normalizeStorageProperties() {
 			table.setDirty(true);
 		}
 	}
-}]]>
+}
+]]>
 		</script>
 	</lib>
 </custom_libraries>
