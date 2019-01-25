@@ -72,7 +72,7 @@ return true
 end]]>
 		</script>
 	</lib>
-	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName,tableWithOutPK,tableWithOutVolumetry,tableWithOutDataCompression,generateSQLConfiguration,normalizeStorageProperties" >
+	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName,tableWithOutPK,tableWithOutVolumetry,tableWithOutDataCompression,generateSQLConfiguration,normalizeStorageProperties,validateTableTablespaceUsage" >
 		<script>
 			<![CDATA[// Variable used to return custom message
 var ruleMessage;
@@ -460,7 +460,6 @@ function tableWithOutVolumetry(table) {
  *    Boolean. True if the design rule is satisfied,
  *             otherwise False.
  */
-
 function tableWithOutDataCompression(table) {
 
   // Stores the result of this custom
@@ -507,6 +506,8 @@ function generateSQLConfiguration() {
 	ddlStatementsList.add(new java.lang.String(cfgDDL));
 }
 
+/*============================================================================*/
+
 function getTableVolumetry(pTable) {
 	
 	var table = model.getTableSet().getByName(pTable.getName());
@@ -518,6 +519,8 @@ function getTableVolumetry(pTable) {
 	
 	return retVolumetry;
 }
+
+/*============================================================================*/
 
 /**
  * The goal of this custom transformation script is to adjust
@@ -645,7 +648,82 @@ function normalizeStorageProperties() {
 			table.setDirty(true);
 		}
 	}
-}]]>
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot table which
+ * wrong tablespace assingment, based on table's "Volume Properties",
+ * "Expected" property.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+function validateTableTablespaceUsage(table) {
+	// Table's Tablespace per expected rows
+	var TABLE_TABLESPACE_SMALL  = "HP_1M_01D";
+	var TABLE_TABLESPACE_MEDIUM = "HP_16M_01D";
+	var TABLE_TABLESPACE_LARGE  = "HP_256M_01D";
+	
+	// Index's Tablespace per table expected rows
+	var INDEX_TABLESPACE_SMALL  = "HP_1M_01X";
+	var INDEX_TABLESPACE_MEDIUM = "HP_16M_01X";
+	var INDEX_TABLESPACE_LARGE  = "HP_256M_01X";
+	
+	// Lob's Tablespace per table expected rows
+	var LOB_TABLESPACE_SMALL  = "OA_1M_32K_01L";
+	var LOB_TABLESPACE_MEDIUM = "OA_16M_32K_01L";
+	var LOB_TABLESPACE_LARGE  = "OA_256M_32K_01L";
+
+	// Volumetry ranges
+	var START_RANGE_SMALL  = 0;
+	var END_RANGE_SMALL    = 100000;
+	var START_RANGE_MEDIUM = 100001;
+	var END_RANGE_MEDIUM   = 1000000;
+	var START_RANGE_LARGE  = 1000000;
+
+	var result = true;
+
+	// Get the expected amount of rows
+	tableVolumetry = table.getExpectedVolumes();
+	if (tableVolumetry != null) {
+
+		ruleMessage  = "Invalid tablespace definition. Using "
+		
+		if (tableVolumetry >= START_RANGE_SMALL && tableVolumetry <= END_RANGE_SMALL) {
+			tableSpaceName = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_SMALL).getName();
+			if (!tableSpaceName.equals(TABLE_TABLESPACE_SMALL)) {
+				result       = false;
+				ruleMessage += tableSpaceName;
+				ruleMessage += " instead of " + TABLE_TABLESPACE_SMALL;
+				errType      = "Error";
+			}
+		} else if (tableVolumetry >= START_RANGE_MEDIUM && tableVolumetry <= END_RANGE_MEDIUM) {
+			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_MEDIUM);
+			if (!tableSpaceName.equals(TABLE_TABLESPACE_MEDIUM)) {
+				result       = false;
+				ruleMessage += tableSpaceName;
+				ruleMessage += " instead of " + TABLE_TABLESPACE_MEDIUM;
+				errType      = "Error";
+			}
+		} else if (tableVolumetry > START_RANGE_LARGE) {
+			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_LARGE);
+			if (!tableSpaceName.equals(START_RANGE_LARGE)) {
+				result       = false;
+				ruleMessage += tableSpaceName;
+				ruleMessage += " instead of " + START_RANGE_LARGE;
+				errType      = "Error";
+			}
+		}
+	}
+
+	return result;
+}
+]]>
 		</script>
 	</lib>
 </custom_libraries>
