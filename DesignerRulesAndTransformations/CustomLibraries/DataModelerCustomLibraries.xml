@@ -562,7 +562,7 @@ function normalizeStorageProperties() {
 	var END_RANGE_SMALL    = 100000;
 	var START_RANGE_MEDIUM = 100001;
 	var END_RANGE_MEDIUM   = 1000000;
-	var START_RANGE_LARGE  = 1000000;
+	var START_RANGE_LARGE  = 1000001;
 
 	// Retrieve and process a set of tables from the Physical Model
 	var tables = model.getStorageDesign().getTableProxySet().toArray();
@@ -591,7 +591,7 @@ function normalizeStorageProperties() {
 			} else if (tableVolumetry >= START_RANGE_MEDIUM && tableVolumetry <= END_RANGE_MEDIUM) {
 				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_MEDIUM);
 				table.setTableSpace(tableSpace);
-			} else if (tableVolumetry > START_RANGE_LARGE) {
+			} else if (tableVolumetry >= START_RANGE_LARGE) {
 				tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_LARGE);
 				table.setTableSpace(tableSpace);
 			}
@@ -609,7 +609,7 @@ function normalizeStorageProperties() {
 	     		} else if (tableVolumetry >= START_RANGE_MEDIUM && tableVolumetry <= END_RANGE_MEDIUM) {
 	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_MEDIUM);
 	     			tableIndex.setTableSpace(tableSpace);
-	     		} else if (tableVolumetry > START_RANGE_LARGE) {
+	     		} else if (tableVolumetry >= START_RANGE_LARGE) {
 	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(INDEX_TABLESPACE_LARGE);
 	     			tableIndex.setTableSpace(tableSpace);
 	     		}
@@ -639,7 +639,7 @@ function normalizeStorageProperties() {
 	     		} else if (tableVolumetry >= START_RANGE_MEDIUM && tableVolumetry <= END_RANGE_MEDIUM) {
 	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_MEDIUM);
 	     			tableLobStorage.setTableSpace(tableSpace);
-	     		} else if (tableVolumetry > START_RANGE_LARGE) {
+	     		} else if (tableVolumetry >= START_RANGE_LARGE) {
 	     			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(LOB_TABLESPACE_LARGE);
 	     			tableLobStorage.setTableSpace(tableSpace);
 	     		}
@@ -684,46 +684,47 @@ function validateTableTablespaceUsage(table) {
 	var END_RANGE_SMALL    = 100000;
 	var START_RANGE_MEDIUM = 100001;
 	var END_RANGE_MEDIUM   = 1000000;
-	var START_RANGE_LARGE  = 1000000;
+	var START_RANGE_LARGE  = 1000001;
 
 	var result = true;
 
+	var model table.getDesignPart();
+	
 	// Get the expected amount of rows
 	tableVolumetry = table.getExpectedVolumes();
 	if (tableVolumetry != null) {
 
-		ruleMessage  = "Invalid tablespace definition. Using "
-		
-		if (tableVolumetry >= START_RANGE_SMALL && tableVolumetry <= END_RANGE_SMALL) {
-			tableSpaceName = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_SMALL).getName();
-			if (!tableSpaceName.equals(TABLE_TABLESPACE_SMALL)) {
-				result       = false;
-				ruleMessage += tableSpaceName;
-				ruleMessage += " instead of " + TABLE_TABLESPACE_SMALL;
-				errType      = "Error";
-			}
-		} else if (tableVolumetry >= START_RANGE_MEDIUM && tableVolumetry <= END_RANGE_MEDIUM) {
-			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_MEDIUM);
-			if (!tableSpaceName.equals(TABLE_TABLESPACE_MEDIUM)) {
-				result       = false;
-				ruleMessage += tableSpaceName;
-				ruleMessage += " instead of " + TABLE_TABLESPACE_MEDIUM;
-				errType      = "Error";
-			}
-		} else if (tableVolumetry > START_RANGE_LARGE) {
-			tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_LARGE);
-			if (!tableSpaceName.equals(START_RANGE_LARGE)) {
-				result       = false;
-				ruleMessage += tableSpaceName;
-				ruleMessage += " instead of " + START_RANGE_LARGE;
-				errType      = "Error";
-			}
-		}
+		//ruleMessage  = "Invalid tablespace definition. Using "
+		//
+		//if (tableVolumetry >= START_RANGE_SMALL && tableVolumetry <= END_RANGE_SMALL) {
+		//	tableSpaceName = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_SMALL).getName();
+		//	if (!tableSpaceName.equals(TABLE_TABLESPACE_SMALL)) {
+		//		result       = false;
+		//		ruleMessage += tableSpaceName;
+		//		ruleMessage += " instead of " + TABLE_TABLESPACE_SMALL;
+		//		errType      = "Error";
+		//	}
+		//} else if (tableVolumetry >= START_RANGE_MEDIUM && tableVolumetry <= END_RANGE_MEDIUM) {
+		//	tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_MEDIUM);
+		//	if (!tableSpaceName.equals(TABLE_TABLESPACE_MEDIUM)) {
+		//		result       = false;
+		//		ruleMessage += tableSpaceName;
+		//		ruleMessage += " instead of " + TABLE_TABLESPACE_MEDIUM;
+		//		errType      = "Error";
+		//	}
+		//} else if (tableVolumetry >= START_RANGE_LARGE) {
+		//	tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_LARGE);
+		//	if (!tableSpaceName.equals(START_RANGE_LARGE)) {
+		//		result       = false;
+		//		ruleMessage += tableSpaceName;
+		//		ruleMessage += " instead of " + START_RANGE_LARGE;
+		//		errType      = "Error";
+		//	}
+		//}
 	}
 
 	return result;
-}
-]]>
+}]]>
 		</script>
 	</lib>
 </custom_libraries>
