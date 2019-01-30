@@ -574,7 +574,7 @@ function normalizeStorageProperties() {
 		}
 	
 		if (table.getCompressionType() != COMPRESSION_OLTP) {
-			table.setCompressionType(true);
+			table.setCompressionType(COMPRESSION_OLTP);
 			table.setDirty(true);
 		}
 		
