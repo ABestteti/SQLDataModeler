@@ -86,7 +86,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.24.01.2019";
+  var versao = "Versão: 1.0.05.02.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -688,39 +688,43 @@ function validateTableTablespaceUsage(table) {
 
 	var result = true;
 
-	var model table.getDesignPart();
-	
-	// Get the expected amount of rows
-	tableVolumetry = table.getExpectedVolumes();
-	if (tableVolumetry != null) {
+	// Gets the reference to the model
+	model = table.getDesignPart();
 
-		//ruleMessage  = "Invalid tablespace definition. Using "
-		//
-		//if (tableVolumetry >= START_RANGE_SMALL && tableVolumetry <= END_RANGE_SMALL) {
-		//	tableSpaceName = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_SMALL).getName();
-		//	if (!tableSpaceName.equals(TABLE_TABLESPACE_SMALL)) {
-		//		result       = false;
-		//		ruleMessage += tableSpaceName;
-		//		ruleMessage += " instead of " + TABLE_TABLESPACE_SMALL;
-		//		errType      = "Error";
-		//	}
-		//} else if (tableVolumetry >= START_RANGE_MEDIUM && tableVolumetry <= END_RANGE_MEDIUM) {
-		//	tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_MEDIUM);
-		//	if (!tableSpaceName.equals(TABLE_TABLESPACE_MEDIUM)) {
-		//		result       = false;
-		//		ruleMessage += tableSpaceName;
-		//		ruleMessage += " instead of " + TABLE_TABLESPACE_MEDIUM;
-		//		errType      = "Error";
-		//	}
-		//} else if (tableVolumetry >= START_RANGE_LARGE) {
-		//	tableSpace = model.getStorageDesign().getTableSpaceSet().getByName(TABLE_TABLESPACE_LARGE);
-		//	if (!tableSpaceName.equals(START_RANGE_LARGE)) {
-		//		result       = false;
-		//		ruleMessage += tableSpaceName;
-		//		ruleMessage += " instead of " + START_RANGE_LARGE;
-		//		errType      = "Error";
-		//	}
-		//}
+	// Retrieve from physical model the table storage
+	tableStorage = model.getStorageDesign().getStorageObject(table.getObjectID());
+
+	// Gets the tablespace assigned to the table
+     tableTablespace = tableStorage.getTableSpace();
+     
+	// Gets the expected amount of rows 
+	tableVolumetry = table.getExpectedVolumes();
+
+     // Validate tablespace being used by the table based on its volumetry
+	if (tableVolumetry != null) {
+		ruleMessage  = "Invalid tablespace definition. Using "
+		if (tableVolumetry >= START_RANGE_SMALL && tableVolumetry <= END_RANGE_SMALL) {
+			if (!tableTablespace.getName().equals(TABLE_TABLESPACE_SMALL)) {
+				result       = false;
+				ruleMessage += tableTablespace;
+				ruleMessage += " instead of " + TABLE_TABLESPACE_SMALL;
+				errType      = "Error";
+			}
+		} else if (tableVolumetry >= START_RANGE_MEDIUM && tableVolumetry <= END_RANGE_MEDIUM) {
+			if (!tableTablespace.getName().equals(TABLE_TABLESPACE_MEDIUM)) {
+				result       = false;
+				ruleMessage += tableTablespace;
+				ruleMessage += " instead of " + TABLE_TABLESPACE_MEDIUM;
+				errType      = "Error";
+			}
+		} else if (tableVolumetry >= START_RANGE_LARGE) {
+			if (!tableTablespace.getName().equals(START_RANGE_LARGE)) {
+				result       = false;
+				ruleMessage += tableTablespace;
+				ruleMessage += " instead of " + START_RANGE_LARGE;
+				errType      = "Error";
+			}
+		}
 	}
 
 	return result;
