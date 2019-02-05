@@ -58,4 +58,9 @@ checkFKColumns(index);]]>
 			<![CDATA[]]>
 		</script>
 	</scr>
+	<scr id="756DE154-799A-42CB-7E46-A162B768E6B6" name="TJRS - Tables with wrong tablespace usage" object="Table" engine="Oracle Nashorn" type="Error" var="table" library="TJRS lib" method="validateTableTablespaceUsage" purpose="validation" >
+		<script>
+			<![CDATA[]]>
+		</script>
+	</scr>
 </custom__validation_scripts>
