@@ -9,6 +9,7 @@ Here is the list of new sripts that I created:
 - Index with invalid name
 - Tables without primary key
 - Tables without volume properties
+- Tables with invalid tablespace assignment
 
 # Custom Transformation Scripts:
 - Create index on FK
