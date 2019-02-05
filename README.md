@@ -1,5 +1,5 @@
 # SQLDataModeler
-JavaScript scripts for Oracle SQL Data Modeler's custom design rules and custom transformation. Additionally, there is custom reports for SQL Developer available.
+JavaScript scripts for Oracle SQL Data Modeler's custom design rules and custom transformation. Additionally, there are custom reports for SQL Developer available.
 Please, fell free to send your comments on these scripts, as well as suggestions to new ones.
 
 Please, note that thare are some scripts in this repository that are shipped with Oracle SQL Data Moduler.</br> 
