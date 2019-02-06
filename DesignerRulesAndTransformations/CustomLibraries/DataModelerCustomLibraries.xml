@@ -86,7 +86,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.05.02.2019";
+  var versao = "Versão: 1.0.06.02.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -558,7 +558,7 @@ function normalizeStorageProperties() {
 	var LOB_TABLESPACE_LARGE  = "OA_256M_32K_01L";
 
 	// Volumetry ranges
-	var START_RANGE_SMALL  = 0;
+	var START_RANGE_SMALL  = 1;
 	var END_RANGE_SMALL    = 100000;
 	var START_RANGE_MEDIUM = 100001;
 	var END_RANGE_MEDIUM   = 1000000;
@@ -680,13 +680,18 @@ function validateTableTablespaceUsage(table) {
 	var LOB_TABLESPACE_LARGE  = "OA_256M_32K_01L";
 
 	// Volumetry ranges
-	var START_RANGE_SMALL  = 0;
+	var START_RANGE_SMALL  = 1;
 	var END_RANGE_SMALL    = 100000;
 	var START_RANGE_MEDIUM = 100001;
 	var END_RANGE_MEDIUM   = 1000000;
 	var START_RANGE_LARGE  = 1000001;
 
 	var result = true;
+
+	// Before move on check table's volumetry property
+	if (!tableWithOutVolumetry(table)) {
+		return false;
+	}
 
 	// Gets the reference to the model
 	model = table.getDesignPart();
@@ -721,7 +726,7 @@ function validateTableTablespaceUsage(table) {
 			if (!tableTablespace.getName().equals(START_RANGE_LARGE)) {
 				result       = false;
 				ruleMessage += tableTablespace;
-				ruleMessage += " instead of " + START_RANGE_LARGE;
+				ruleMessage += " instead of " + TABLE_TABLESPACE_LARGE;
 				errType      = "Error";
 			}
 		}
