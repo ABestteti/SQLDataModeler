@@ -86,7 +86,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.15.02.2019";
+  var versao = "Versão: 1.1.15.02.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -490,17 +490,24 @@ function generateSQLConfiguration() {
 
 	cfgDDL  = "\nPROMPT Configuracao do ambiente de execucao do SQL\n";
 	cfgDDL += "WHENEVER SQLERROR EXIT FAILURE;\n";
-	cfgDDL += "SET SCAN OFF;\n";
 	
      // Assumes that the first element from the array of users is
      // the correct user that represents the main model's schema.
      // There is opened at My Oracle Support, SR 3-19213495941, asking how to
      // get this information from Relational Model, Schemas rather than from
      // from Physcal Model.
-     users = model.getStorageDesign().getUserSchemaSet().toArray();
-     user  = users[0];
 
-     cfgDDL += "ALTER SESSION SET CURRENT_SCHEMA=" + user.getName() + "\n\n";
+     // ABS - TODO: find a solution to get the correct schema owner from
+     //             model. Meanwhile, it will use <<AJUSTAR SCHEMA>> literal to
+     //             avoid wrong schema mane for ALTER SESSION.
+     //users = model.getStorageDesign().getUserSchemaSet().toArray();
+     //user  = users[0];
+     //cfgDDL += "ALTER SESSION SET CURRENT_SCHEMA=" + user.getName() + "\n\n";
+     cfgDDL += "ALTER SESSION SET CURRENT_SCHEMA=<<AJUSTAR SCHEMA>>;\n";
+
+	cfgDDL += "SET SCAN OFF;\n";
+	cfgDDL += "SET ECHO ON;\n";
+     cfgDDL += "SET TIMING ON;\n\n";
 	
 	// Add the configuration at the begining of DDL script
 	ddlStatementsList.add(new java.lang.String(cfgDDL));
@@ -765,7 +772,7 @@ function sequencesWithNOCACHE(table) {
      var setting        = model.getAppView().getSettings();
      var validationDone = setting.getUserDefinedPreferenceValue("VALIDATED");
 
-     if (validationDone.equals("false")) {
+     if (validationDone.equalsIgnoreCase("false")) {
         //sequencesWithNOCACHE(table);
 
         // Set the UDF "VALIDATED" to "true" in order to run
@@ -792,7 +799,7 @@ function sequencesWithNOCACHE(table) {
 	for (var i=0; i < sequenceArray.length; i++) {
 		sequence = sequenceArray[i];
 
-		if (sequence.getNoCache().equals("YES")) {
+		if (sequence.getNoCache().equalsIgnoreCase("YES")) {
 			ruleMessage += " sequence " + sequence.getName() + " is defined as NOCACHE. Please, validate it with system analyst;";
 			result = false;
 		}
