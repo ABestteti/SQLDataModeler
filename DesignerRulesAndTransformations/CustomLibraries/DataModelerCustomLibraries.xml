@@ -72,7 +72,7 @@ return true
 end]]>
 		</script>
 	</lib>
-	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName,tableWithOutPK,tableWithOutVolumetry,tableWithOutDataCompression,generateSQLConfiguration,normalizeStorageProperties,validateTableTablespaceUsage" >
+	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName,tableWithOutPK,tableWithOutVolumetry,tableWithOutDataCompression,generateSQLConfiguration,normalizeStorageProperties,validateTableTablespaceUsage,sequencesWithNOCACHE" >
 		<script>
 			<![CDATA[// Variable used to return custom message
 var ruleMessage;
@@ -86,7 +86,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.0.06.02.2019";
+  var versao = "Versão: 1.0.15.02.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -729,6 +729,72 @@ function validateTableTablespaceUsage(table) {
 				ruleMessage += " instead of " + TABLE_TABLESPACE_LARGE;
 				errType      = "Error";
 			}
+		}
+	}
+
+	return result;
+}
+
+/*============================================================================*/
+
+/**
+ * This Design rule aims to spot sequences that use the NOCACHE option.
+ * NOCACHE must be used it caution and then the review by developer and/or
+ * system analyst is needed.
+ * 
+ * Parameters
+ *   table: a given table object
+ * Returns
+ *    Boolean. True if the design rule is satisfied,
+ *             otherwise False.
+ */
+function sequencesWithNOCACHE(table) {
+	var result = true;
+
+	// Gets the reference to the model
+	var model = table.getDesignPart();
+
+	// Retrieve from physical model the sequence set
+	var sequenceSet = model.getStorageDesign().getStorageObjectSetForType('Sequence');
+
+     // Clear the design rule's content
+     ruleMessage        = "";
+     
+     // Gets the Uder Defined Preferen to control the design rule
+     // execution.
+     var setting        = model.getAppView().getSettings();
+     var validationDone = setting.getUserDefinedPreferenceValue("VALIDATED");
+
+     if (validationDone.equals("false")) {
+        //sequencesWithNOCACHE(table);
+
+        // Set the UDF "VALIDATED" to "true" in order to run
+        // this design rule once. The reason is that the sequences are
+        // retrieved in the first object (table) feteched by the Javascript
+        // runtime. Then the remaining table will be dismissed by this design rule once
+        // the UDF "VALIDATED" was set to "true" in the first iteration.
+        setting.addUserDefinedPreference("VALIDATED","true");
+
+        javax.swing.JOptionPane
+          .showMessageDialog
+           (null, 
+            "Please update the User Defined Preference 'VALIDATED' to 'false'.",
+            "Action required",
+            javax.swing.JOptionPane.INFORMATION_MESSAGE
+           );
+     }
+     else {
+     	return result;
+     }
+     
+	sequenceArray = sequenceSet.toArray();
+
+	for (var i=0; i < sequenceArray.length; i++) {
+		sequence = sequenceArray[i];
+
+		if (sequence.getNoCache().equals("YES")) {
+			ruleMessage += " sequence " + sequence.getName() + " is defined as NOCACHE. Please, validate it with system analyst;";
+			result = false;
 		}
 	}
 

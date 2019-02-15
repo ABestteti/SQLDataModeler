@@ -63,4 +63,9 @@ checkFKColumns(index);]]>
 			<![CDATA[]]>
 		</script>
 	</scr>
+	<scr id="679189F6-E6A8-5409-FEA3-31B6DC8A462D" name="TJRS - Sequences with NOCACHE" object="Table" engine="Oracle Nashorn" type="Warning" var="table" library="TJRS lib" method="sequencesWithNOCACHE" purpose="validation" >
+		<script>
+			<![CDATA[]]>
+		</script>
+	</scr>
 </custom__validation_scripts>
