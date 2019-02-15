@@ -10,6 +10,7 @@ Here is the list of new sripts that I created:
 - Tables without primary key
 - Tables without volume properties
 - Tables with invalid tablespace assignment
+- Sequences with NOCACHE
 
 # Custom Transformation Scripts:
 - Create index on FK
