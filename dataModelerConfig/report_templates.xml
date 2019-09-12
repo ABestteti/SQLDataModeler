@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<report_templates>
+	<report_template id="8AD0915A-6881-637C-06AE-5DE35971CCED" name="RTemplate_1" class="oracle.dbtools.crest.model.design.relational.Table" >
+		<description_notes>true</description_notes>
+		<quantitative_info>true</quantitative_info>
+		<diagrams>true</diagrams>
+		<table_columns>true</table_columns>
+		<table_columns_comments>true</table_columns_comments>
+		<table_constraints>true</table_constraints>
+		<table_fk_rf>true</table_fk_rf>
+		<table_fk_rt>true</table_fk_rt>
+		<table_indexes>true</table_indexes>
+	</report_template>
+	<report_template id="C403CC88-CEFD-D275-9C8E-4C5DBD89B5CE" name="RTemplate_1" class="oracle.dbtools.crest.model.design.logical.Entity" >
+		<description_notes>true</description_notes>
+		<quantitative_info>true</quantitative_info>
+		<diagrams>true</diagrams>
+		<entity_attributes>true</entity_attributes>
+		<entity_attributes_comments>true</entity_attributes_comments>
+		<entity_constraints>true</entity_constraints>
+		<entity_identifiers>true</entity_identifiers>
+		<entity_relationships>true</entity_relationships>
+		<entity_inc_processes>false</entity_inc_processes>
+		<entity_out_processes>false</entity_out_processes>
+	</report_template>
+</report_templates>
