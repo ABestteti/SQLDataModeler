@@ -2983,6 +2983,16 @@ function sequencesWithNOCACHE(table) {
 }]]>
 		</script>
 	</scr>
+	<scr id="669444D9-7E75-EDA0-0194-7529209E22A5" name="Remove table schema" object="relational" engine="Oracle Nashorn" type="" var="model" library="" method="" purpose="transformation" >
+		<script>
+			<![CDATA[tables = model.getTableSet().toArray();
+for (var t = 0; t<tables.length;t++){
+ table = tables[t];
+ table.setSchemaObject(null);
+ table.setDirty(true);
+}]]>
+		</script>
+	</scr>
 
 	<lib id="B310E434-78AE-6AED-EA94-6808B0262483" name="my first library" engine="Oracle Nashorn" methods="checkcomments,NotNullConstr_Name_Length" >
 		<script>
@@ -3055,7 +3065,7 @@ return true
 end]]>
 		</script>
 	</lib>
-	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName,tableWithOutPK,tableWithOutVolumetry,tableWithOutDataCompression,generateSQLConfiguration,normalizeStorageProperties,validateTableTablespaceUsage,sequencesWithNOCACHE" >
+	<lib id="79C2ED6C-9A18-434F-F0FE-838F87B60814" name="TJRS lib" engine="Oracle Nashorn" methods="versaoBiblioteca,indexWithInvalidName,FKWithOutIndex,createIndexOnFK,normalizeIndexName,tableWithOutPK,tableWithOutVolumetry,tableWithOutDataCompression,generateSQLConfiguration,normalizeStorageProperties,validateTableTablespaceUsage,sequencesWithNOCACHE,removeSchemaFromTables" >
 		<script>
 			<![CDATA[// Variable used to return custom message
 var ruleMessage;
@@ -3072,7 +3082,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.2.12.09.2019";
+  var versao = "Versão: 1.2.23.09.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane
@@ -3082,6 +3092,21 @@ function versaoBiblioteca() {
       titulo,
       javax.swing.JOptionPane.INFORMATION_MESSAGE
      );
+}
+
+/*============================================================================*/
+
+/**
+ * This custom transformation aims to clear the property "schema"
+ * from tables in relational model.
+ */
+function removeSchemaFromTables() {
+	tables = model.getTableSet().toArray();
+	for (var t = 0; t < tables.length; t++) {
+		table = tables[t];
+		table.setSchemaObject(null);
+		table.setDirty(true);
+	}
 }
 
 /*============================================================================*/
