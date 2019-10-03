@@ -3082,7 +3082,7 @@ var errType;
 /*============================================================================*/
 
 function versaoBiblioteca() {
-  var versao = "Versão: 1.2.23.09.2019";
+  var versao = "Versão: 1.2.03.10.2019";
   var titulo = "TJRS - Biblioteca de scripts";
 
   javax.swing.JOptionPane

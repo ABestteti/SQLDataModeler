@@ -255,7 +255,7 @@
 	</default_line_widths_and_colors>
 	<naming_standard_rules>
 		<logical>
-			<separator value= "Character" char=" "/>
+			<separator value= "Space" char=" "/>
 			<entity>
 			</entity>
 			<attribute>
@@ -278,30 +278,29 @@
 			<pk value="PK_{table}"/>
 			<fk value="FK_{child abbr}_{parent abbr}"/>
 			<ck value="CK_{table}"/>
-			<un value="UK_{table abbr}_{column}"/>
-			<idx value="IDX_{table abbr}_{column}"/>
-			<automatic_idx value="IDX_{table abbr}_{column}"/>
-			<colck value="CK_{table}_{column}"/>
+			<un value="UK_{table}_{seq nr}"/>
+			<idx value="IDX_{table}_{seq nr}"/>
+			<automatic_idx value="IDX_{table}_{seq nr}"/>
+			<colck value="CK_{table abbr}_{column}"/>
 			<colnnc value="NNC_{table abbr}_{column}"/>
 			<column_foreign_key value="{ref table abbr}_{ref column}"/>
 			<ui value="PK {entity}"/>
 			<relation_attribute value="{ref entity}_{ref attribute}"/>
-			<surrogate_key value="PK_{table abbr}"/>
-			<surrogate_key_col value="{table abbr}_ID"/>
+			<surrogate_key value="PK_{table}"/>
+			<surrogate_key_col value="ID"/>
 			<discriminator_col value="{table abbr}_TYPE"/>
 		</constraints>
 		<glossaries>
-			<glossary_file value="C:\Users\a.bsantos\Temp\MODELO_CURSO.glossary"/>
 		</glossaries>
 	</naming_standard_rules>
 	<comparemapping>
 	</comparemapping>
 	<engineering_params>
 		<delete_without_origin value="false"/>
-		<engineer_coordinates value="false"/>
+		<engineer_coordinates value="true"/>
 		<engineer_generated value="true"/>
 		<show_engineering_intree value="false"/>
-		<apply_naming_std value="false"/>
+		<apply_naming_std value="true"/>
 		<use_pref_abbreviation value="true"/>
 		<upload_directory value=""/>
 		<date_format value="YYYY/MM/DD HH24:MI:SS"/>
@@ -391,18 +390,18 @@
 	<model_compare_storage_props_filter>
 	</model_compare_storage_props_filter>
 	<naming_options>
-		<model_options objectid="537DA1DB-574E-1FF9-29F0-7B6D6BE8EEC5">
-			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Table" max_name_length="128" case_type="2" valid_characters="null" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Column" max_name_length="128" case_type="2" valid_characters="null" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.relational.TableView" max_name_length="128" case_type="2" valid_characters="null" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint" max_name_length="128" case_type="2" valid_characters="null" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" max_name_length="128" case_type="2" valid_characters="" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Index" max_name_length="128" case_type="2" valid_characters="null" all_valid="true" />
+		<model_options objectid="27FDF422-C070-60EA-246A-41BED22E1A83">
+			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Table" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Column" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.relational.TableView" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Index" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
 		</model_options>
-		<model_options objectid="D0366B62-AA46-8E6D-4B76-86D541A4BAD6">
-			<naming_option class_name="oracle.dbtools.crest.model.design.logical.Entity" max_name_length="254" case_type="2" valid_characters="" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.logical.Attribute" max_name_length="254" case_type="2" valid_characters="" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.logical.EntityView" max_name_length="254" case_type="2" valid_characters="" all_valid="true" />
+		<model_options objectid="A87AC8B3-37D3-9AD1-44B5-01A24202F28C">
+			<naming_option class_name="oracle.dbtools.crest.model.design.logical.Entity" max_name_length="30" case_type="0" valid_characters="null" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.logical.Attribute" max_name_length="30" case_type="0" valid_characters="null" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.logical.EntityView" max_name_length="30" case_type="0" valid_characters="null" all_valid="true" />
 		</model_options>
 	</naming_options>
 	<deleted_files>
@@ -431,8 +430,8 @@
 				<subviews value="70"/>
 				<arcs value="70"/>
 				<physical_models_estimates>
-							<physical_model_537DA1DB-574E-1FF9-29F0-7B6D6BE8EEC5_Oracle_Database_12cR2>
-								<physical_model_name value="Oracle Database 12cR2"/>
+							<physical_model_27FDF422-C070-60EA-246A-41BED22E1A83_Oracle_Database_11g>
+								<physical_model_name value="Oracle Database 11g"/>
 								<clusters value="70"/>
 								<contexts value="70"/>
 								<dBs value="70"/>
@@ -458,7 +457,7 @@
 								<users value="70"/>
 								<views value="70"/>
 								<triggers value="70"/>
-							</physical_model_537DA1DB-574E-1FF9-29F0-7B6D6BE8EEC5_Oracle_Database_12cR2>
+							</physical_model_27FDF422-C070-60EA-246A-41BED22E1A83_Oracle_Database_11g>
 				</physical_models_estimates>
 			</relational_model_0_estimates>
 		</relational_model_estimates>
