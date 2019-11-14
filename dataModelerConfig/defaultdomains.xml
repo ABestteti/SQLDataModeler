@@ -1,54 +1,9 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <DomainFile class="oracle.dbtools.crest.model.design.DomainFileWrapper" fileName="defaultdomains">
 <domains>
-<Domain class="oracle.dbtools.crest.model.design.Domain" name="SURROGATE" id="05434B35-5535-7E93-C58B-EB1EA635CD3A">
-<createdBy>a.bsantos</createdBy>
-<createdTime>2019-08-16 13:16:10 UTC</createdTime>
-<ownerDesignName>System</ownerDesignName>
-<avTSortOrder>0</avTSortOrder>
-<dataTypePrecision>10</dataTypePrecision>
-<dataTypeScale>0</dataTypeScale>
-<fileName>defaultdomains</fileName>
-<logicalDatatype>LOGDT019</logicalDatatype>
-</Domain>
-<Domain class="oracle.dbtools.crest.model.design.Domain" name="NOME_DOM" id="0E8D39A1-8E44-E90F-5F58-8DDF33286BFA">
-<createdBy>a.bsantos</createdBy>
-<createdTime>2019-08-16 13:09:14 UTC</createdTime>
-<ownerDesignName>System</ownerDesignName>
-<avTSortOrder>0</avTSortOrder>
-<dataTypeSize>50</dataTypeSize>
-<fileName>defaultdomains</fileName>
-<logicalDatatype>LOGDT024</logicalDatatype>
-</Domain>
-<Domain class="oracle.dbtools.crest.model.design.Domain" name="UPDATE_DATE" id="6005EA10-6B6F-48AA-0507-59105CB5B8AF">
-<createdBy>a.bsantos</createdBy>
-<createdTime>2018-09-25 14:31:53 UTC</createdTime>
-<comment><![CDATA[Default date for date columns when needed]]></comment>
-<ownerDesignName>System</ownerDesignName>
-<avTSortOrder>0</avTSortOrder>
-<defaultValue>SYSDATE</defaultValue>
-<fileName>defaultdomains</fileName>
-<logicalDatatype>LOGDT007</logicalDatatype>
-<synonym>UPDATE_DATE</synonym>
-</Domain>
-<Domain class="oracle.dbtools.crest.model.design.Domain" name="SEXO" id="8DE075EB-514C-178F-4B81-F6B10A462040">
-<createdBy>a.bsantos</createdBy>
-<createdTime>2019-04-05 19:56:21 UTC</createdTime>
-<comment><![CDATA[Define o sexo de uma pessoa.]]></comment>
-<ownerDesignName>System</ownerDesignName>
-<avTSortOrder>0</avTSortOrder>
-<dataTypePrecision>1</dataTypePrecision>
-<dataTypeSize>1 CHAR</dataTypeSize>
-<fileName>defaultdomains</fileName>
-<logicalDatatype>LOGDT025</logicalDatatype>
-<listOfValues>
-<valueDef value="F" description="Feminino"/>
-<valueDef value="M" description="Masculino"/>
-</listOfValues>
-</Domain>
 <Domain class="oracle.dbtools.crest.model.design.Domain" name="Unknown" id="DOM3000004">
 <createdBy>a.bsantos</createdBy>
-<createdTime>2018-09-05 16:50:31 UTC</createdTime>
+<createdTime>2019-11-14 13:16:32 UTC</createdTime>
 <ownerDesignName>System</ownerDesignName>
 <avTSortOrder>0</avTSortOrder>
 <fileName>defaultdomains</fileName>

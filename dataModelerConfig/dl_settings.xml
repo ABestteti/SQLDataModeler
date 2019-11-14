@@ -300,7 +300,7 @@
 		<engineer_coordinates value="true"/>
 		<engineer_generated value="true"/>
 		<show_engineering_intree value="false"/>
-		<apply_naming_std value="true"/>
+		<apply_naming_std value="false"/>
 		<use_pref_abbreviation value="true"/>
 		<upload_directory value=""/>
 		<date_format value="YYYY/MM/DD HH24:MI:SS"/>
@@ -390,18 +390,18 @@
 	<model_compare_storage_props_filter>
 	</model_compare_storage_props_filter>
 	<naming_options>
-		<model_options objectid="27FDF422-C070-60EA-246A-41BED22E1A83">
-			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Table" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Column" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.relational.TableView" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
+		<model_options objectid="DE4CD1F6-68EC-3CE0-15EA-BB24DE4C67CE">
+			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Table" max_name_length="30" case_type="2" valid_characters="null" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Column" max_name_length="30" case_type="2" valid_characters="null" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.relational.TableView" max_name_length="30" case_type="2" valid_characters="null" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint" max_name_length="30" case_type="2" valid_characters="null" all_valid="true" />
 			<naming_option class_name="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Index" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Index" max_name_length="30" case_type="2" valid_characters="null" all_valid="true" />
 		</model_options>
-		<model_options objectid="A87AC8B3-37D3-9AD1-44B5-01A24202F28C">
-			<naming_option class_name="oracle.dbtools.crest.model.design.logical.Entity" max_name_length="30" case_type="0" valid_characters="null" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.logical.Attribute" max_name_length="30" case_type="0" valid_characters="null" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.logical.EntityView" max_name_length="30" case_type="0" valid_characters="null" all_valid="true" />
+		<model_options objectid="25C27C2E-B7D3-A057-FE9E-9CBB4629A39B">
+			<naming_option class_name="oracle.dbtools.crest.model.design.logical.Entity" max_name_length="254" case_type="2" valid_characters="" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.logical.Attribute" max_name_length="254" case_type="2" valid_characters="" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.logical.EntityView" max_name_length="254" case_type="2" valid_characters="" all_valid="true" />
 		</model_options>
 	</naming_options>
 	<deleted_files>
@@ -422,7 +422,7 @@
 		</data_types_model_estimates>
 		<relational_model_estimates>
 			<relational_model_0_estimates>
-				<relational_model_name value="Relational_1"/>
+				<relational_model_name value="Relational CTJ"/>
 				<tables value="70"/>
 				<views value="70"/>
 				<foreign_keys value="70"/>
@@ -430,7 +430,7 @@
 				<subviews value="70"/>
 				<arcs value="70"/>
 				<physical_models_estimates>
-							<physical_model_27FDF422-C070-60EA-246A-41BED22E1A83_Oracle_Database_11g>
+							<physical_model_DE4CD1F6-68EC-3CE0-15EA-BB24DE4C67CE_Oracle_Database_11g>
 								<physical_model_name value="Oracle Database 11g"/>
 								<clusters value="70"/>
 								<contexts value="70"/>
@@ -457,7 +457,7 @@
 								<users value="70"/>
 								<views value="70"/>
 								<triggers value="70"/>
-							</physical_model_27FDF422-C070-60EA-246A-41BED22E1A83_Oracle_Database_11g>
+							</physical_model_DE4CD1F6-68EC-3CE0-15EA-BB24DE4C67CE_Oracle_Database_11g>
 				</physical_models_estimates>
 			</relational_model_0_estimates>
 		</relational_model_estimates>
