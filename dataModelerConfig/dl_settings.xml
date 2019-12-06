@@ -276,11 +276,11 @@
 		<constraints>
 			<pk value="PK_{table}"/>
 			<fk value="FK_{child abbr}_{parent abbr}"/>
-			<ck value="CK_{table}"/>
-			<un value="UK_{table abbr}_{column}"/>
-			<idx value="IDX_{table abbr}_{column}"/>
-			<automatic_idx value="IDX_{table abbr}_{column}"/>
-			<colck value="CK_{table}_{column}"/>
+			<ck value="CK_{table abbr}"/>
+			<un value="UK_{table abbr}_{seq nr}"/>
+			<idx value="IDX_{table abbr}_{seq nr}"/>
+			<automatic_idx value="IDX_{table abbr}_{constraint}"/>
+			<colck value="CK_{table abbr}_{column}"/>
 			<colnnc value="NNC_{table abbr}_{column}"/>
 			<column_foreign_key value="{ref table abbr}_{ref column}"/>
 			<ui value="PK_{entity}"/>
@@ -389,15 +389,15 @@
 	<model_compare_storage_props_filter>
 	</model_compare_storage_props_filter>
 	<naming_options>
-		<model_options objectid="63280564-93FB-7DF4-6985-80B523BEA058">
-			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Table" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Column" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.relational.TableView" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
+		<model_options objectid="11328097-CE29-D3AB-04B1-26813AA069CE">
+			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Table" max_name_length="30" case_type="2" valid_characters="null" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Column" max_name_length="30" case_type="2" valid_characters="null" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.relational.TableView" max_name_length="30" case_type="2" valid_characters="null" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint" max_name_length="30" case_type="2" valid_characters="null" all_valid="true" />
 			<naming_option class_name="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
-			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Index" max_name_length="30" case_type="2" valid_characters="" all_valid="true" />
+			<naming_option class_name="oracle.dbtools.crest.model.design.relational.Index" max_name_length="30" case_type="2" valid_characters="null" all_valid="true" />
 		</model_options>
-		<model_options objectid="BCE6315A-A3DF-96A7-0B28-B965C37F4907">
+		<model_options objectid="3C459D9F-B2D2-A455-7E49-678E103D2586">
 			<naming_option class_name="oracle.dbtools.crest.model.design.logical.Entity" max_name_length="254" case_type="2" valid_characters="" all_valid="true" />
 			<naming_option class_name="oracle.dbtools.crest.model.design.logical.Attribute" max_name_length="254" case_type="2" valid_characters="" all_valid="true" />
 			<naming_option class_name="oracle.dbtools.crest.model.design.logical.EntityView" max_name_length="254" case_type="2" valid_characters="" all_valid="true" />
@@ -421,7 +421,7 @@
 		</data_types_model_estimates>
 		<relational_model_estimates>
 			<relational_model_0_estimates>
-				<relational_model_name value="Relational_1"/>
+				<relational_model_name value="Relational AVF"/>
 				<tables value="70"/>
 				<views value="70"/>
 				<foreign_keys value="70"/>
@@ -429,7 +429,7 @@
 				<subviews value="70"/>
 				<arcs value="70"/>
 				<physical_models_estimates>
-							<physical_model_63280564-93FB-7DF4-6985-80B523BEA058_Oracle_Database_11g>
+							<physical_model_11328097-CE29-D3AB-04B1-26813AA069CE_Oracle_Database_11g>
 								<physical_model_name value="Oracle Database 11g"/>
 								<clusters value="70"/>
 								<contexts value="70"/>
@@ -456,7 +456,7 @@
 								<users value="70"/>
 								<views value="70"/>
 								<triggers value="70"/>
-							</physical_model_63280564-93FB-7DF4-6985-80B523BEA058_Oracle_Database_11g>
+							</physical_model_11328097-CE29-D3AB-04B1-26813AA069CE_Oracle_Database_11g>
 				</physical_models_estimates>
 			</relational_model_0_estimates>
 		</relational_model_estimates>
