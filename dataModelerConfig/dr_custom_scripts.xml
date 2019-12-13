@@ -3821,7 +3821,7 @@ function sequencesWithNOCACHE(table) {
 		</script>
 	</lib>
 
-	<ruleset id="992CFA6A-068C-3AA9-CD45-EC597DAF834D" name="TJRS-ValidacoesModelo">
+	<ruleset id="306F67CF-F630-1293-27FD-8E186D5F4002" name="TJRS-Validacoes Integradas do Modelo">
 			<rule id="273541C2-9F46-A972-510C-146B117AE338"/>
 			<rule id="4091D7C0-AD54-B648-024F-FDD7E7B7D401"/>
 			<rule id="B0F0E2CA-6F41-463F-73A0-17FB99716AC6"/>

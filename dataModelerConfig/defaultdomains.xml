@@ -1,6 +1,36 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <DomainFile class="oracle.dbtools.crest.model.design.DomainFileWrapper" fileName="defaultdomains">
 <domains>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="ATIVO" id="A2BE2CD7-7D07-3CDF-F987-C44C7ED7B3F8">
+<createdBy>a.bsantos</createdBy>
+<createdTime>2019-12-12 19:38:07 UTC</createdTime>
+<comment><![CDATA[Indica se um registro está ativo: S-Sim; N-Não]]></comment>
+<ownerDesignName>System</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypeSize>1</dataTypeSize>
+<defaultValue>S</defaultValue>
+<fileName>defaultdomains</fileName>
+<logicalDatatype>LOGDT025</logicalDatatype>
+<listOfValues>
+<valueDef value="N" description="Não"/>
+<valueDef value="S" description="Sim"/>
+</listOfValues>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="AVF_SITUACAO_REGISTRO" id="B8DD2317-5E0A-A8C3-84DA-0257D5FC6F4E">
+<createdBy>a.bsantos</createdBy>
+<createdTime>2019-12-09 13:37:52 UTC</createdTime>
+<comment><![CDATA[Indica a situação do registro. Assume valores: "A" - ativo "I" - inativo]]></comment>
+<ownerDesignName>System</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypeSize>1</dataTypeSize>
+<defaultValue>A</defaultValue>
+<fileName>defaultdomains</fileName>
+<logicalDatatype>LOGDT025</logicalDatatype>
+<listOfValues>
+<valueDef value="A" description="Ativo"/>
+<valueDef value="I" description="Inativo"/>
+</listOfValues>
+</Domain>
 <Domain class="oracle.dbtools.crest.model.design.Domain" name="Unknown" id="DOM3000004">
 <createdBy>a.bsantos</createdBy>
 <createdTime>2019-11-14 13:16:32 UTC</createdTime>
